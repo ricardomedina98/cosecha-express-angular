@@ -1,0 +1,10 @@
+.login-page{    
+ 
+    background-image: url('/assets/images/background_login.jpg');
+    min-height: 100%;
+    width: 100%;
+    background-size: cover; 
+    overflow: hidden;   
+   
+}
+   

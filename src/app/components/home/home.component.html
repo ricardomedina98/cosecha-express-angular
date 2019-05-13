@@ -1,26 +1,34 @@
-<mk-box header="About Angular Admin LTE" [isCollapsable]="false" [isRemovable]="false">
-  <p>Angular Admin LTE is an implementation of the Admin LTE theme. It comes with native angular components and directive and do not need JS dependencies. It provides a layout module witch comes with components for header, sidebar right & left, footer...</p>
-</mk-box>
-
-<mk-box header="Download" [isCollapsable]="false" [isRemovable]="false">
-  <p>Angular Admin LTE is available at npm, if you have an existing application run the following command to download it to your project.</p>
-  <p>Angular Admin LTE is distributed in commonjs format, a module manager of your choice is required.</p>
-  <pre><code class="language-bash">npm install angular-admin-lte --save</code></pre>
-</mk-box>
-
-<mk-box header="Import" [isCollapsable]="false" [isRemovable]="false">
-  <p>UI components are configured as modules, once Angular Admin LTE is downloaded and configured, modules and apis can be imported from 'angular-loading-page' shorthand in your application code.</p>
-  <pre><code class="language-typescript">import &#123; LayoutModule &#125; from 'angular-admin-lte';    //Loading layout module
-import &#123; BoxModule &#125; from 'angular-admin-lte';       //Box component</code></pre>
-</mk-box>
-
-<mk-box header="Dependencies" [isCollapsable]="false" [isRemovable]="false">
-  <p>Angular Admin LTE have no JS dependencies but still need Admin LTE and Bootstrap CSS. You can also use FontAwesome and Ionicons as it is used by default in Admin LTE.</p>
-  <pre><code class="language-typescript">"styles": [
-  "node_modules/bootstrap-css-only/css/bootstrap.min.css",
-  "node_modules/font-awesome/css/font-awesome.css", // optional
-  "node_modules/ionicons/css/ionicons.css", // optional
-  "node_modules/admin-lte-css/dist/css/AdminLTE.css",
-  "node_modules/admin-lte-css/dist/css/skins/_all-skins.css"
-]</code></pre>
-</mk-box>
+<ng-container *ngIf="customLayout; else noCustomLayout">
+  <router-outlet></router-outlet>
+</ng-container>
+<ng-template #noCustomLayout>
+  <mk-layout-wrapper>
+    <mk-layout-header logoLink="/">
+      <mk-layout-header-logo><b>Angular </b>AdminLTE</mk-layout-header-logo>
+      <mk-layout-header-logo-mini><b>A</b>LTE</mk-layout-header-logo-mini>
+      <app-header-inner></app-header-inner>
+    </mk-layout-header>
+    <mk-layout-sidebar-left>
+      <app-sidebar-left-inner></app-sidebar-left-inner>
+    </mk-layout-sidebar-left>
+    <mk-layout-sidebar-right>
+      <app-sidebar-right-inner></app-sidebar-right-inner>
+    </mk-layout-sidebar-right>
+    <mk-layout-content>
+      <div mk-layout-content-before-header>
+        <div *mkLoadingPage="{checkPendingHttp: true, checkPendingRoute: true}">
+          <mk-material-bar></mk-material-bar>
+        </div>
+      </div>
+      <router-outlet></router-outlet>
+    </mk-layout-content>
+    <mk-layout-footer>
+      <mk-layout-footer-left>
+        <strong>Powered by <a href="http://almsaeedstudio.com/%22%3EAdminLte"></a>/a>.</strong>
+      </mk-layout-footer-left>
+      <mk-layout-footer-right>
+        <b>Version</b> 2.4.2
+      </mk-layout-footer-right>
+    </mk-layout-footer>
+  </mk-layout-wrapper>
+</ng-template>

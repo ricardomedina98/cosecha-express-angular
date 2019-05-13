@@ -27,8 +27,7 @@ export class AuthentificationService {
         let data = {
             nombre_usuario: username,
             contrasena: password
-        }
-        console.log(data);
+        }        
         return this.http.post<any>(`${environment.url_api}iniciar_sesion`, data)
         .pipe(map (user=> {
 

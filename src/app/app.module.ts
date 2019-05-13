@@ -12,7 +12,7 @@ import { LayoutModule, AlertModule } from 'angular-admin-lte';
 
 import { ErrorInterceptor, JwtInterceptor } from './helpers';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './components/home/home.component';
+import { TemplateComponent } from './core/template.component';
 
 import { LoadingPageModule, MaterialBarModule } from 'angular-loading-page';
 import { LoginComponent } from './components/login/login.component';
@@ -20,7 +20,7 @@ import { LoginComponent } from './components/login/login.component';
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
+    TemplateComponent,
     LoginComponent
   ],
   imports: [

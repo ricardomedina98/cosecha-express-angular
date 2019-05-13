@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LayoutService } from 'angular-admin-lte';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,16 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'cosecha-express-frontend';
+  public customLayaout: boolean;
+
+  constructor(
+    private LayaoutService: LayoutService
+  ) {}
+
+  ngOnInit() {
+    this.LayaoutService.isCustomLayout.subscribe((value: boolean) => {
+      this.customLayaout = value;
+    });
+    
+  }  
 }

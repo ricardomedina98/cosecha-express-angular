@@ -16,12 +16,14 @@ import { TemplateComponent } from './core/template.component';
 
 import { LoadingPageModule, MaterialBarModule } from 'angular-loading-page';
 import { LoginComponent } from './components/login/login.component';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TemplateComponent,
-    LoginComponent
+    LoginComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

@@ -3,38 +3,38 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { adminLteConf } from './admin-lte.conf';
-
 import { AppRoutingModule } from './app-routing.module';
-import { CoreModule } from './core/core.module';
-
-import { LayoutModule, AlertModule } from 'angular-admin-lte';
+import { LoadingPageModule, MaterialBarModule } from 'angular-loading-page';
+import { adminLteConf } from './admin-lte.conf';
+import {LayoutModule, AlertModule } from 'angular-admin-lte';
 
 import { ErrorInterceptor, JwtInterceptor } from './helpers';
 import { AppComponent } from './app.component';
-import { TemplateComponent } from './core/template.component';
 
-import { LoadingPageModule, MaterialBarModule } from 'angular-loading-page';
 import { LoginComponent } from './components/login/login.component';
+import { CoreComponent, CoreModule } from './core';
 import { HomeComponent } from './components/home/home.component';
+import { ProfileComponent } from './components/profile/profile.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    TemplateComponent,
+    CoreComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    HttpClientModule,
     CoreModule,
-    AlertModule,
+    HttpClientModule,
     LayoutModule.forRoot(adminLteConf),
-    LoadingPageModule, MaterialBarModule
-  
+    LoadingPageModule, 
+    MaterialBarModule,
+    AlertModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

@@ -10,6 +10,7 @@ export const adminLteConf = {
     // layout: 'normal',
     sidebarLeftMenu: [
       {label: 'MAIN NAVIGATION', separator: true},
-      {label: 'Inicio', route: '/', iconClasses: 'fa fa-road', pullRights: [{classes: 'label pull-right bg-green'}]}
+      {label: 'Inicio', route: '/', iconClasses: 'fa fa-road', pullRights: [{classes: 'label pull-right bg-green'}]},
+      {label: 'Perfil', route: '/perfil', iconClasses: 'fa fa-user', pullRights: [{classes: 'label pull-right bg-green'}]}
     ]
   };

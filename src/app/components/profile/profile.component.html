@@ -1,3 +1,56 @@
-<p>
-  profile works!
-</p>
+<div class="col-lg-12 mt-3">
+    <form class="col-md-5 ml-0 pl-0" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+
+        <div class="form-group">
+            <label for="nombre_employee">Nombre de Empleado</label>
+            <input type="text" id="nombre_employee" formControlName="nombre_employee"
+                [ngClass]="{ 'is-invalid': submitted && f.nombre_employee.errors }" required class="form-control" />
+            <div *ngIf="submitted && f.nombre_employee.errors" class="invalid-feedback d-block">
+                <div *ngIf="f.nombre_employee.errors.required" class="text-danger">El nombre de empleado es requerido
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="nombre_usuario">Usuario</label>
+            <input type="text" id="nombre_usuario" formControlName="nombre_usuario"
+                [ngClass]="{ 'is-invalid': submitted && f.nombre_usuario.errors }" required class="form-control" />
+            <div *ngIf="submitted && f.nombre_usuario.errors" class="invalid-feedback d-block">
+                <div *ngIf="f.nombre_usuario.errors.required" class="text-danger">El nombre de usuario es requerido
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="contrasena">Contraseña</label>
+            <input type="password" id="contrasena" formControlName="contrasena" required class="form-control" />
+            <div *ngIf="submitted && f.contrasena.errors" class="invalid-feedback">
+                <div *ngIf="f.contrasena.errors.required" class="text-danger">La contraseña es requerida</div>
+            </div>
+        </div>
+
+        <!--
+
+        <label for="contrasena">Genero</label>
+
+        <div class="form-group">
+            
+            <div class="col-sm-4">
+                <input type="radio" value="hombre" formControlName="genero"> Masculino
+                
+            </div>
+            <div class="col-sm-4">
+                <input type="radio" value="mujer" formControlName="genero"> Femenino
+            </div>
+        </div>
+
+        -->
+   
+        <div class="form-group btnSubmitProfile">
+            <div class="col-auto pull-left">
+                <input type="submit" value="Guardar cambios" class="btn btn-success" />
+            </div>
+        </div>       
+
+    </form>
+</div>

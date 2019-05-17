@@ -19,6 +19,10 @@ const routes: Routes = [
         data: {
           title: 'Perfil'
         }
+      },
+      {
+        path:'proveedores',
+        loadChildren: '../components/providers/providers.module#ProvidersModule'
       }
     ]
   }

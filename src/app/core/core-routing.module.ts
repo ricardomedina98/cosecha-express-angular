@@ -22,7 +22,24 @@ const routes: Routes = [
       },
       {
         path:'proveedores',
-        loadChildren: '../components/providers/providers.module#ProvidersModule'
+        loadChildren: '../components/providers/providers.module#ProvidersModule',
+        data: {
+          title: 'Proveedores'
+        }
+      },
+      {
+        path:'productos',
+        loadChildren: '../components/products/products.module#ProductsModule',
+        data: {
+          title: 'Productos'
+        }
+      },
+      {
+        path:'clientes',
+        loadChildren: '../components/clients/clients.module#ClientsModule',
+        data: {
+          title: 'Clientes'
+        }
       }
     ]
   }

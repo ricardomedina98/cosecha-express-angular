@@ -12,14 +12,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 
 import { LayoutService, AlertModule } from 'angular-admin-lte';
-import { ProvidersComponent } from './components/providers/providers.component';
-
-
 
 @NgModule({
   declarations: [
     AppComponent,
-    ProvidersComponent
   ],
   imports: [
     BrowserModule,

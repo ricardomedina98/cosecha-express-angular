@@ -4,16 +4,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
-import { LoadingPageModule, MaterialBarModule } from 'angular-loading-page';
-import { adminLteConf } from './admin-lte.conf';
-import { LayoutModule, AlertModule } from 'angular-admin-lte';
 
 import { ErrorInterceptor, JwtInterceptor } from './helpers';
 import { AppComponent } from './app.component';
-import { CoreModule } from './core/core.module';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+
+import { LayoutService, AlertModule } from 'angular-admin-lte';
 
 
 
@@ -25,13 +23,9 @@ import { ToastrModule } from 'ngx-toastr';
     BrowserModule,
     ReactiveFormsModule,
     AppRoutingModule,    
-    HttpClientModule,
-    LayoutModule.forRoot(adminLteConf),
-    LoadingPageModule, 
-    MaterialBarModule,
+    HttpClientModule,    
     AlertModule,
-    BrowserAnimationsModule, 
-    CoreModule,    
+    BrowserAnimationsModule,  
     ToastrModule.forRoot({
       timeOut: 2000,
       positionClass: 'toast-bottom-right',
@@ -41,6 +35,7 @@ import { ToastrModule } from 'ngx-toastr';
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    LayoutService
   ],
   bootstrap: [AppComponent]
 })

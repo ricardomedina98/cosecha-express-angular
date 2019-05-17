@@ -7,33 +7,18 @@ const routes: Routes = [
     {
         path: '',
         canActivate: [AuthGuard],
+        loadChildren: './core/core.module#CoreModule',
         data: {
             title: 'Inicio'
-        },
-        children: [
-            {
-                path: '',
-                loadChildren: './components/home/home.module#HomeModule',
-                data: {
-                    title: 'Inicio'
-                }
-            }, 
-            {
-                path: 'perfil',
-                loadChildren: './components/profile/profile.module#ProfileModule',
-                data: {
-                    title: 'Perfil'
-                }
-            }
-        ]
+        }
     },
     {
         path: 'login',
+        loadChildren: './components/login/login.module#LoginModule',      
         data: {
             title: 'Iniciar Sesion',
             customLayout: true
         },
-        loadChildren: './components/login/login.module#LoginModule'
     },
     {
         path: '**',

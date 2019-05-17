@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthentificationService } from '../../services/authentification.service';
 
 @Component({
   selector: 'app-sidebar-left-inner',
@@ -6,10 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sidebar-left-inner.component.css']
 })
 export class SidebarLeftInnerComponent implements OnInit {
+  public currentUser;
 
-  constructor() { }
+  constructor(
+    private authenticationService: AuthentificationService) { 
+      this.currentUser = this.authenticationService.currentUserValue;
+    }
 
   ngOnInit() {
+    //console.log(this.currentUser.usuario);
   }
 
 }

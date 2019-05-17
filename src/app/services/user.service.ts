@@ -24,9 +24,12 @@ export class UserService {
             contrasena: contrasena
         }
         
-        return this.http.put<any>(`${environment.url_api}usuario/${this.currentUser.usuario.id_usuario}`, data)
-        .pipe(map (user=> {            
-            return user;
+        return this.http.put<any>(`${environment.url_api}usuarioperfil/${this.currentUser.usuario.id_usuario}`, data)
+        .pipe(map (result=> {                        
+            if(result.OK){
+                
+            }
+            return result;
         }));
     }
 }

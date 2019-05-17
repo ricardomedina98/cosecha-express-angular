@@ -1,32 +1,39 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
-
-import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
-import { CoreComponent } from './core';
-import { HomeComponent } from './components/home/home.component';
-import { ProfileComponent } from './components/profile/profile.component';
 
-const routes: Routes = [
+
+const routes: Routes = [ 
+    {
+        path: '',
+        canActivate: [AuthGuard],
+        data: {
+            title: 'Inicio'
+        },
+        children: [
+            {
+                path: '',
+                loadChildren: './components/home/home.module#HomeModule',
+                data: {
+                    title: 'Inicio'
+                }
+            }, 
+            {
+                path: 'perfil',
+                loadChildren: './components/profile/profile.module#ProfileModule',
+                data: {
+                    title: 'Perfil'
+                }
+            }
+        ]
+    },
     {
         path: 'login',
-        component: LoginComponent
-    },
-    { 
-        path: '',
-        component: CoreComponent,
-        canActivate: [AuthGuard],
-        children: [ {
-            path: '',
-            component: HomeComponent
+        data: {
+            title: 'Iniciar Sesion',
+            customLayout: true
         },
-        {
-            path: 'perfil',
-            component: ProfileComponent
-        }    
-    ]
-
+        loadChildren: './components/login/login.module#LoginModule'
     },
     {
         path: '**',

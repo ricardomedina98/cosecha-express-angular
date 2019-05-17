@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthentificationService } from '../../services/authentification.service';
 
 @Component({
@@ -9,12 +10,21 @@ import { AuthentificationService } from '../../services/authentification.service
 export class HeaderInnerComponent implements OnInit {
     public currentUser;
 
-    constructor(private authenticationService: AuthentificationService) {
-        this.currentUser = authenticationService.currentUserValue;
+    constructor(
+        private authenticationService: AuthentificationService,
+        private router: Router) {
+        this.currentUser = this.authenticationService.currentUserValue;
     }
 
     ngOnInit() {
         console.log(this.currentUser.usuario);
     }
+
+    logout() {
+        this.authenticationService.logout();
+        this.router.navigate(['/login']);
+    }
+
+
 
 }

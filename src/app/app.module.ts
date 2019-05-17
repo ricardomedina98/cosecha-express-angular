@@ -6,35 +6,37 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { LoadingPageModule, MaterialBarModule } from 'angular-loading-page';
 import { adminLteConf } from './admin-lte.conf';
-import {LayoutModule, AlertModule } from 'angular-admin-lte';
+import { LayoutModule, AlertModule } from 'angular-admin-lte';
 
 import { ErrorInterceptor, JwtInterceptor } from './helpers';
 import { AppComponent } from './app.component';
+import { CoreModule } from './core/core.module';
 
-import { LoginComponent } from './components/login/login.component';
-import { CoreComponent, CoreModule } from './core';
-import { HomeComponent } from './components/home/home.component';
-import { ProfileComponent } from './components/profile/profile.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+
 
 
 @NgModule({
   declarations: [
-    AppComponent,
-    CoreComponent,
-    LoginComponent,
-    HomeComponent,
-    ProfileComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
-    AppRoutingModule,
-    CoreModule,
+    AppRoutingModule,    
     HttpClientModule,
     LayoutModule.forRoot(adminLteConf),
     LoadingPageModule, 
     MaterialBarModule,
-    AlertModule
+    AlertModule,
+    BrowserAnimationsModule, 
+    CoreModule,    
+    ToastrModule.forRoot({
+      timeOut: 2000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    })
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

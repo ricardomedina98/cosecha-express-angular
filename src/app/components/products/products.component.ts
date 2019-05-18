@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+
+import { BsModalService, BsModalRef, setTheme } from 'ngx-bootstrap';
+ 
 
 @Component({
   selector: 'app-products',
@@ -6,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./products.component.css']
 })
 export class ProductsComponent implements OnInit {
-
-  constructor() { }
-
+  modalRef: BsModalRef;
+  
+  constructor(private modalService: BsModalService) {
+    setTheme('bs3');
+   }
+  
+  openModalWithClass(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(
+      template,
+      Object.assign({}, { class: 'gray modal-lg' })
+    );
+  }
 
   ngOnInit() {
   }

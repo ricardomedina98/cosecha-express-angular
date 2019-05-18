@@ -28,8 +28,9 @@
               }
             ],
             "styles": [
+              
               "node_modules/font-awesome/css/font-awesome.css",
-              "node_modules/bootstrap-css-only/css/bootstrap.min.css",              
+              "node_modules/bootstrap-css-only/css/bootstrap.min.css",
               "node_modules/ionicons/dist/css/ionicons.css",
               "node_modules/prismjs/themes/prism-tomorrow.css",
               "node_modules/admin-lte-css/dist/css/AdminLTE.css",
@@ -96,6 +97,7 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
             "scripts": [],

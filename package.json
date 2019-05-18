@@ -22,6 +22,7 @@
     "@types/prismjs": "^1.16.0",
     "angular-admin-lte": "^2.0.1",
     "angular-loading-page": "^0.6.0",
+    "bootstrap": "4.2.1",
     "bootstrap-css-only": "^3.3.7",
     "core-js": "^2.5.4",
     "font-awesome": "^4.7.0",

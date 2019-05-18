@@ -6,9 +6,12 @@ import { ProductsComponent } from './products.component';
 
 import { HttpClientModule } from '@angular/common/http';
 
-
-
 import { NzTableModule } from 'ng-zorro-antd';
+
+import { ModalModule } from 'ngx-bootstrap';
+
+
+
 
 import 'rxjs';
 
@@ -18,7 +21,8 @@ import 'rxjs';
     CommonModule,
     ProductsRoutingModule,
     HttpClientModule,
-    NzTableModule  
+    NzTableModule,
+    ModalModule.forRoot()
   ]
 })
 export class ProductsModule { }

@@ -4,7 +4,11 @@ import { CommonModule } from '@angular/common';
 import { ProductsRoutingModule } from './products-routing.module';
 import { ProductsComponent } from './products.component';
 
-import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { HttpClientModule } from '@angular/common/http';
+
+
+
+import { NzTableModule } from 'ng-zorro-antd';
 
 import 'rxjs';
 
@@ -13,7 +17,8 @@ import 'rxjs';
   imports: [
     CommonModule,
     ProductsRoutingModule,
-    Ng2SmartTableModule
+    HttpClientModule,
+    NzTableModule  
   ]
 })
 export class ProductsModule { }

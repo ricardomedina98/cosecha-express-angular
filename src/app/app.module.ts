@@ -13,6 +13,9 @@ import { ToastrModule } from 'ngx-toastr';
 
 import { LayoutService, AlertModule } from 'angular-admin-lte';
 
+import { NgZorroAntdModule} from 'ng-zorro-antd';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +26,8 @@ import { LayoutService, AlertModule } from 'angular-admin-lte';
     AppRoutingModule,    
     HttpClientModule,    
     AlertModule,
-    BrowserAnimationsModule,  
+    BrowserAnimationsModule, 
+    NgZorroAntdModule, 
     ToastrModule.forRoot({
       timeOut: 2000,
       positionClass: 'toast-bottom-right',

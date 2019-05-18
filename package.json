@@ -27,6 +27,7 @@
     "font-awesome": "^4.7.0",
     "ionicons": "^4.5.8",
     "ng-zorro-antd": "^7.3.3",
+    "ngx-bootstrap": "^4.1.1",
     "ngx-toastr": "^10.0.4",
     "prismjs": "^1.16.0",
     "rxjs": "~6.3.3",

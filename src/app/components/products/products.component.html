@@ -1,50 +1,150 @@
-<nz-table #columnTable [nzData]="listOfData" [nzScroll]="{ x: '1100px' }">
-    <thead>
-      <tr>
-        <th nzWidth="100px" nzLeft="0px">Full Name</th>
-        <th nzWidth="100px" nzLeft="100px">Age</th>
-        <th nzWidth="100px">Column 1</th>
-        <th nzWidth="100px">Column 2</th>
-        <th nzWidth="100px">Column 3</th>
-        <th nzWidth="100px">Column 4</th>
-        <th nzWidth="100px">Column 5</th>
-        <th nzWidth="100px">Column 6</th>
-        <th nzWidth="100px">Column 7</th>
-        <th nzRight="100px" nzWidth="100px">Column 8</th>
-        <th nzWidth="100px" nzRight="0px">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of columnTable.data">
-        <td nzLeft="0px">{{ data.name }}</td>
-        <td nzLeft="100px">{{ data.age }}</td>
-        <td>{{ data.address }}</td>
-        <td>{{ data.address }}</td>
-        <td>{{ data.address }}</td>
-        <td>{{ data.address }}</td>
-        <td>{{ data.address }}</td>
-        <td>{{ data.address }}</td>
-        <td>{{ data.address }}</td>
-        <td nzRight="100px">{{ data.address }}</td>
-        <td nzRight="0px">
-          <a (click)="startEdit(data)">  action</a>
-        </td>
-      </tr>
-    </tbody>
-  </nz-table>
+<div style="background: white">
+    <nz-table #tableProductos [nzData]="products" nzBordered="true" [nzLoading]="isLoading"
+    nzSize="small" nzShowPagination="true">
+        <thead>
+            <tr>
+                <th>Nombre Producto</th>
+                <th>Existencia</th>
+                <th>Precio Diario</th>
+                <th>Precio Semanal</th>
+                <th>Existencia Minima</th>
+                <th>Existencia Maxima</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of tableProductos.data">
+                <td >{{ data.nombre_producto }}</td>
+                <td >{{ data.existencia }}</td>
+                <td >{{ data.precio_diario }}</td>
+                <td >{{ data.precio_semanal }}</td>
+                <td >{{ data.existencia_min }}</td>
+                <td >{{ data.existencia_max }}</td>
+                <td style="text-align: center">
+                    <button style="margin-right: 10px" class="btn btn-success" (click)="openModalEdit(templateModalEdit, data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>                    
+                    <button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</div>
 
 
-<button type="button" class="btn btn-primary" (click)="openModalWithClass(template)">Open modal with custom css class</button>
-<br>
- 
-<ng-template #template>
-  <div class="modal-header">
-    <h4 class="modal-title pull-left">Modal</h4>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    Just a modal with a bunch of words inside, nothing serious.
-  </div>
+
+<ng-template #templateModalEdit>
+    <div class="modal-header" style="background: #008d4c">
+        <h4 class="modal-title pull-left" style="color: white">Editar Producto</h4>
+        <button style="color: white" type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    
+    <div class="modal-body">
+        <form>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-8">
+                        <label for="">Producto</label>
+                        <input type="text" class="form-control" value="{{ productDataSelected.nombre_producto }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="">Existencia</label>
+                        <input type="text" class="form-control">
+                    </div>              
+                </div>
+            </div>
+            
+            <div class="row" style="margin-top: 20px">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <label for="">Precio diario</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" value="{{ productDataSelected.precio_diario }}">
+                            <span class="input-group-btn">
+                                <button class="btn btn-info" type="button" (click)="childPDiario.show()"><i class="fa" style="color:#ffab00" aria-hidden="true"></i></button>
+                            </span>
+                        </div>                              
+                    </div>   
+
+                <div class="col-md-3">
+                    <label for="">Precio semanal</label>
+                    <div class="input-group">                  
+                        <input type="text" class="form-control" value="{{ productDataSelected.precio_semanal }}">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-info" type="button" (click)="childPSemanal.show()"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                </span>
+                        </div>
+                    </div>                    
+
+                    <div class="col-md-3">
+                        <label for="">Existencia max.</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="col-md-3 ">
+                        <label for="">Existencia min.</label>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+            </div>            
+        </form>   
+    </div>
+  
+    <div class="modal-footer">          
+        <button type="button" class="btn btn-success pull-left">Guardar cambios</button>
+        <button (click)="modalRef.hide()" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+    </div>
+
+    <div class="modal fade" bsModal #childPDiario="bs-modal" tabindex="-1" role="dialog" aria-labelledby="dialog-nested-name2">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header" style="background: #008d4c">
+                  <h4 id="dialog-nested-name2" class="modal-title pull-left" style="color: white">Precio diario</h4>
+                  <button type="button" class="close pull-right" aria-label="Close" (click)="childPDiario.hide()">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <label for="">Precio diario.</label>
+                    <input type="text" class="form-control" value="{{ productDataSelected.precio_diario }}">    
+                </div>
+                  
+                <div class="modal-footer">          
+                    <button type="button" class="btn btn-success">Ok</button>
+                    <button (click)="childPDiario.hide()" type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" bsModal #childPSemanal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="dialog-nested-name2">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header" style="background: #008d4c">
+                    <h4 id="dialog-nested-name2" class="modal-title pull-left" style="color: white">Precio semanal</h4>
+                    <button type="button" class="close pull-right" aria-label="Close" (click)="childPSemanal.hide()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label for="">Precio semanal</label>
+                    <input type="text" class="form-control" value="{{ productDataSelected.precio_semanal }}">    
+                </div>
+                      
+                <div class="modal-footer">          
+                    <button type="button" class="btn btn-success">OK</button>
+                    <button (click)="childPSemanal.hide()" type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</ng-template>
+
+<ng-template #name>
+
+
+
+
+
+
 </ng-template>

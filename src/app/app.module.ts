@@ -15,6 +15,12 @@ import { LayoutService, AlertModule } from 'angular-admin-lte';
 
 import { NgZorroAntdModule} from 'ng-zorro-antd';
 
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+
+import { environment } from '../environments/environment';
+ 
+const config: SocketIoConfig = { url: environment.url_api, options: {} };
+
 
 
 @NgModule({
@@ -29,6 +35,7 @@ import { NgZorroAntdModule} from 'ng-zorro-antd';
     AlertModule,
     BrowserAnimationsModule, 
     NgZorroAntdModule, 
+    SocketIoModule.forRoot(config),
     ToastrModule.forRoot({
       timeOut: 2000,
       positionClass: 'toast-bottom-right',

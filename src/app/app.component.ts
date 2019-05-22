@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { AuthentificationService } from './services/authentification.service';
 import { User } from './models/user';
 
+import { setTheme } from 'ngx-bootstrap';
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -22,6 +24,7 @@ export class AppComponent implements OnInit {
         this.authenticationService.currentUser.subscribe(x => {
             this.currentUser = x
         });
+        setTheme("bs3");
     }
 
     ngOnInit() {

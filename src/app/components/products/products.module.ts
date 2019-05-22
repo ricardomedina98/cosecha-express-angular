@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NzTableModule } from 'ng-zorro-antd';
 
 import { ModalModule } from 'ngx-bootstrap';
+import { AccordionModule } from 'ngx-bootstrap';
 
 
 
@@ -22,7 +23,8 @@ import 'rxjs';
     ProductsRoutingModule,
     HttpClientModule,
     NzTableModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    AccordionModule.forRoot()
   ]
 })
 export class ProductsModule { }

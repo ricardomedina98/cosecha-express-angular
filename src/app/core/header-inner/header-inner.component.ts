@@ -16,8 +16,7 @@ export class HeaderInnerComponent implements OnInit {
         this.currentUser = this.authenticationService.currentUserValue;
     }
 
-    ngOnInit() {
-        console.log(this.currentUser.usuario);
+    ngOnInit() {        
     }
 
     logout() {

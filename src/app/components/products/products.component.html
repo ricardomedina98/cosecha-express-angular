@@ -29,10 +29,8 @@
     </nz-table>
 </div>
 
-
-
 <ng-template #templateModalEdit>
-    <div class="modal-header" style="background: #008d4c">
+    <div class="modal-header background-header">
         <h4 class="modal-title pull-left" style="color: white">Editar Producto</h4>
         <button style="color: white" type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
             <span aria-hidden="true">&times;</span>
@@ -61,7 +59,7 @@
                         <div class="input-group">
                             <input type="text" class="form-control" value="{{ productDataSelected.precio_diario }}">
                             <span class="input-group-btn">
-                                <button class="btn btn-info" type="button" (click)="childPDiario.show()"><i class="fa" style="color:#ffab00" aria-hidden="true"></i></button>
+                                <button class="btn btn-orange" type="button" (click)="childPDiario.show()"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                             </span>
                         </div>                              
                     </div>   
@@ -71,7 +69,7 @@
                     <div class="input-group">                  
                         <input type="text" class="form-control" value="{{ productDataSelected.precio_semanal }}">
                                 <span class="input-group-btn">
-                                    <button class="btn btn-info" type="button" (click)="childPSemanal.show()"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                    <button class="btn btn-orange" type="button" (click)="childPSemanal.show()"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                                 </span>
                         </div>
                     </div>                    
@@ -95,19 +93,51 @@
     </div>
 
     <div class="modal fade" bsModal #childPDiario="bs-modal" tabindex="-1" role="dialog" aria-labelledby="dialog-nested-name2">
-        <div class="modal-dialog modal-sm">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
-                <div class="modal-header" style="background: #008d4c">
+                <div class="modal-header background-header" >
                   <h4 id="dialog-nested-name2" class="modal-title pull-left" style="color: white">Precio diario</h4>
                   <button type="button" class="close pull-right" aria-label="Close" (click)="childPDiario.hide()">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
-                    <label for="">Precio diario.</label>
-                    <input type="text" class="form-control" value="{{ productDataSelected.precio_diario }}">    
-                </div>
-                  
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div style="text-align: center">
+                                <label for="txtMinus">-</label>
+                            </div>
+                            <div class="input-group">   
+                                <span class="input-group-btn">
+                                        <button class="btn btn-orange" type="button"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                    </span>            
+                                <input type="text" class="form-control" value="{{ productDataSelected.precio_semanal }}" id="txtMinus">
+                                
+                            </div>
+                        </div>   
+                        <div class="col-md-4">
+                            <label for="">Precio Diario</label>
+                            <div class="input-group">               
+                                    <input type="text" class="form-control" value="{{ productDataSelected.precio_semanal }}">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-orange" type="button"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div style="text-align: center">
+                                <label for="" class="text-center">+</label>                                
+                            </div>
+                            <div class="input-group">               
+                                <input type="text" class="form-control" value="{{ productDataSelected.precio_semanal }}">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-orange" type="button"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>              
                 <div class="modal-footer">          
                     <button type="button" class="btn btn-success">Ok</button>
                     <button (click)="childPDiario.hide()" type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cancelar</button>
@@ -119,7 +149,7 @@
     <div class="modal fade" bsModal #childPSemanal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="dialog-nested-name2">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
-                <div class="modal-header" style="background: #008d4c">
+                <div class="modal-header background-header">
                     <h4 id="dialog-nested-name2" class="modal-title pull-left" style="color: white">Precio semanal</h4>
                     <button type="button" class="close pull-right" aria-label="Close" (click)="childPSemanal.hide()">
                         <span aria-hidden="true">&times;</span>

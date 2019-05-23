@@ -27,6 +27,7 @@ export class ProductsComponent implements OnInit {
         private modalService: BsModalService,
         private productService: ProductService
     ) {
+
         this.productService.getAllProducts()
         .subscribe( request => {                    
             this.products = request;            
@@ -42,6 +43,7 @@ export class ProductsComponent implements OnInit {
         }, error => {
             console.log(error);
         });
+
     }
 
     openModalEdit(templateModalEdit: TemplateRef<any>, data: string) {   
@@ -50,7 +52,9 @@ export class ProductsComponent implements OnInit {
         this.modalRef = this.modalService.show(templateModalEdit, this.config);
     }
 
-    openModalPrecioDiario
+    openModalPrecioDiario() {
+
+    }
 
     
 

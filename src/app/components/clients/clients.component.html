@@ -1,3 +1,78 @@
 <p>
-  clients works!
+    clients works!
 </p>
+      
+<!--
+<div style="background: white">
+        <nz-table #tableProductos [nzData]="products" nzBordered="true" [nzLoading]="isLoading"
+        nzSize="small" nzShowPagination="true">
+            <thead>
+                <tr>
+                    <th nzCustomFilter>Nombre
+                    <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown>
+                        <inz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
+                            <div class="search-box">
+                                <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" />
+                                <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Buscar </button>                               
+                            </div>
+                    </nz-dropdown>
+                    </th>
+                    <th>Apellido Paterno</th>
+                    <th>Apellido Materno</th>
+                    <th>Razon Social</th>
+                    <th>Dirrecion</th>
+                    <th>Correo</th>
+                    <th>Telefono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of tableProductos.data">
+                    <td >{{ data.nombre_cliente }}</td>
+                    <td >{{ data.apellido1 }}</td>
+                    <td >{{ data.apellido2 }}</td>
+                    <td >{{ data.razon_social }}</td>
+                    <td >{{ data.correo }}</td>
+                    <td >{{ data.telefono }}</td>
+                    <td style="text-align: center">
+                        <button style="margin-right: 10px" class="btn btn-success" (click)="openModalEdit(templateModalEdit, data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>                    
+                        <button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+
+
+-->
+
+
+<!--    Lista Precios Cliente
+
+    
+    <div style="background: white">
+        <nz-table #tableProductos [nzData]="products" nzBordered="true" [nzLoading]="isLoading"
+        nzSize="small" nzShowPagination="true">
+            <thead>
+                <tr>
+                    <th>Nombre Producto</th>
+                    <th>Medida</th>
+                    <th>Precio unitario</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of tableProductos.data">
+                    <td >{{ data.nombre_producto }}</td>
+                    <td >{{ data.medida }}</td>
+                    <td >{{ data.precio }}</td>
+                    <td style="text-align: center">
+                        <button style="margin-right: 10px" class="btn btn-success" (click)="openModalEdit(templateModalEdit, data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>                    
+                        <button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+
+-->

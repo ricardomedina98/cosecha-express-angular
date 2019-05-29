@@ -8,8 +8,7 @@ import { AuthentificationService } from '../services/authentification.service';
 export class JwtInterceptor implements HttpInterceptor {
     constructor(private authenticationService: AuthentificationService) { }
 
-    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        // add authorization header with jwt token if available
+    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {     
         let currentUser = this.authenticationService.currentUserValue;
         if (currentUser && currentUser.token) {
             request = request.clone({

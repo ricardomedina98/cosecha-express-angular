@@ -3,10 +3,9 @@
     nzSize="small" nzShowPagination="true">
         <thead>
             <tr>
-                <th>Nombre Producto</th>
+                <th>Nombre</th>
                 <th>Existencia</th>
-                <th>Precio Diario</th>
-                <th>Precio Semanal</th>
+                <th>Precio General</th>
                 <th>Existencia Minima</th>
                 <th>Existencia Maxima</th>
                 <th>Acciones</th>
@@ -14,13 +13,13 @@
         </thead>
         <tbody>
             <tr *ngFor="let data of tableProductos.data">
-                <td >{{ data.nombre_producto }}</td>
-                <td >{{ data.existencia }}</td>
-                <td >{{ data.precio_diario }}</td>
-                <td >{{ data.precio_semanal }}</td>
-                <td >{{ data.existencia_min }}</td>
-                <td >{{ data.existencia_max }}</td>
+                <td>{{ data.nombre_producto }} {{ data.medicion }}</td>
+                <td>{{ data.existencia }}</td>
+                <td>${{ data.precio_semanal }}</td>
+                <td>{{ data.existencia_min }} {{ data.medicion }}</td>
+                <td>{{ data.existencia_max }} {{ data.medicion }}</td>
                 <td style="text-align: center">
+                    <button style="margin-right: 10px" class="btn btn-orange" (click)="openModalEdit(templateModalEquivalencia, data)"><i class="fa fa-calculator" aria-hidden="true"></i></button>                                       
                     <button style="margin-right: 10px" class="btn btn-success" (click)="openModalEdit(templateModalEdit, data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>                    
                     <button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
                 </td>
@@ -30,6 +29,7 @@
 </div>
 
 <ng-template #templateModalEdit>
+
     <div class="modal-header background-header">
         <h4 class="modal-title pull-left" style="color: white">Editar Producto</h4>
         <button style="color: white" type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
@@ -47,41 +47,32 @@
                     </div>
                     <div class="col-md-4">
                         <label for="">Existencia</label>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" value="{{ productDataSelected.existencia }}">
                     </div>              
                 </div>
             </div>
             
             <div class="row" style="margin-top: 20px">
                 <div class="form-group">
-                    <div class="col-md-3">
-                        <label for="">Precio diario</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" value="{{ productDataSelected.precio_diario }}">
+    
+                <div class="col-md-3">
+                <label for="">Precio General</label>
+                    <div class="input-group">                  
+                        <input type="text" class="form-control" value="{{ productDataSelected.precio_general }}">
                             <span class="input-group-btn">
-                                <button class="btn btn-orange" type="button" (click)="childPDiario.show()"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                <button class="btn btn-orange" type="button" (click)="childPgeneral.show()"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                             </span>
-                        </div>                              
-                    </div>   
+                    </div>
+                </div>                    
 
                 <div class="col-md-3">
-                    <label for="">Precio semanal</label>
-                    <div class="input-group">                  
-                        <input type="text" class="form-control" value="{{ productDataSelected.precio_semanal }}">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-orange" type="button" (click)="childPSemanal.show()"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                                </span>
-                        </div>
-                    </div>                    
-
-                    <div class="col-md-3">
-                        <label for="">Existencia max.</label>
+                <label for="">Existencia max.</label>
                         <input type="text" class="form-control">
-                    </div>
-                    <div class="col-md-3 ">
-                        <label for="">Existencia min.</label>
+                </div>
+                <div class="col-md-3 ">
+                    <label for="">Existencia min.</label>
                         <input type="text" class="form-control">
-                    </div>
+                </div>
                 </div>
             </div>            
         </form>   
@@ -92,62 +83,53 @@
         <button (click)="modalRef.hide()" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
     </div>
 
-    <div class="modal fade" bsModal #childPDiario="bs-modal" tabindex="-1" role="dialog" aria-labelledby="dialog-nested-name2">
+    <div class="modal fade" bsModal #childPgeneral="bs-modal" tabindex="-1" role="dialog" aria-labelledby="dialog-nested-name2">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header background-header" >
-                  <h4 id="dialog-nested-name2" class="modal-title pull-left" style="color: white">Precio diario</h4>
-                  <button type="button" class="close pull-right" aria-label="Close" (click)="childPDiario.hide()">
+                  <h4 id="dialog-nested-name2" class="modal-title pull-left" style="color: white">Precio General</h4>
+                  <button type="button" class="close pull-right" aria-label="Close" (click)="childPgeneral.hide()">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-3">
-                            <div style="text-align: center">
-                                <label for="txtMinus">-</label>
-                            </div>
-                            <div class="input-group">   
-                                <span class="input-group-btn">
-                                        <button class="btn btn-orange" type="button"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                                    </span>            
-                                <input type="text" class="form-control" value="{{ productDataSelected.precio_semanal }}" id="txtMinus">
-                                
-                            </div>
-                        </div>   
                         <div class="col-md-4">
-                            <label for="">Precio Diario</label>
+                        <label for="">Precio General</label>
                             <div class="input-group">               
-                                    <input type="text" class="form-control" value="{{ productDataSelected.precio_semanal }}">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-orange" type="button"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                                </span>
+                                <input type="text" class="form-control" value="{{ productDataSelected.precio_general }}">                   
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div style="text-align: center">
-                                <label for="" class="text-center">+</label>                                
+                        <label for="">% porcentaje</label>
+                            <div class="input-group">                  
+                                <input type="text" class="form-control">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-orange" type="button" ><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                    </span>
                             </div>
-                            <div class="input-group">               
-                                <input type="text" class="form-control" value="{{ productDataSelected.precio_semanal }}">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-orange" type="button"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                                </span>
+                        </div>  
+                        <div class="col-md-3">
+                        <label for="">$ pesos</label>
+                            <div class="input-group">                  
+                                <input type="text" class="form-control">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-orange" type="button" ><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                    </span>
                             </div>
-                        </div>
-                    </div>
-                    
+                        </div> 
+                    </div>                 
                 </div>              
                 <div class="modal-footer">          
                     <button type="button" class="btn btn-success">Ok</button>
-                    <button (click)="childPDiario.hide()" type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cancelar</button>
+                    <button (click)="childPgeneral.hide()" type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cancelar</button>
                 </div>
             </div>
         </div>
     </div>
-
+    
     <div class="modal fade" bsModal #childPSemanal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="dialog-nested-name2">
-        <div class="modal-dialog modal-sm">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header background-header">
                     <h4 id="dialog-nested-name2" class="modal-title pull-left" style="color: white">Precio semanal</h4>
@@ -156,25 +138,61 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <label for="">Precio semanal</label>
-                    <input type="text" class="form-control" value="{{ productDataSelected.precio_semanal }}">    
+                    <div class="row">
+                        <div class="col-md-4">
+                        <label for="">Precio Semanal</label>
+                            <div class="input-group">               
+                                <input type="text" class="form-control" value="{{ productDataSelected.precio_semanal }}">                   
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                        <label for="">% porcentaje</label>
+                            <div class="input-group">                  
+                                <input type="text" class="form-control">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-orange" type="button" ><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                    </span>
+                            </div>
+                        </div>  
+                        <div class="col-md-3">
+                        <label for="">$ pesos</label>
+                            <div class="input-group">                  
+                                <input type="text" class="form-control">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-orange" type="button" ><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                    </span>
+                            </div>
+                        </div> 
+                    </div>  
                 </div>
-                      
                 <div class="modal-footer">          
                     <button type="button" class="btn btn-success">OK</button>
                     <button (click)="childPSemanal.hide()" type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cancelar</button>
                 </div>
             </div>
         </div>
-    </div>
-    
+    </div> 
+
 </ng-template>
 
-<ng-template #name>
+<ng-template #templateModalEquivalencia>
 
-
-
-
-
+        <div class="modal-header background-header">
+            <h4 class="modal-title pull-left" style="color: white">Equivalencia del Producto</h4>
+            <button style="color: white" type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        
+        <div class="modal-body">
+            <form>
+                          
+            </form>   
+        </div>
+        
+        <div class="modal-footer">          
+            <button type="button" class="btn btn-success pull-left">Guardar cambios</button>
+            <button (click)="modalRef.hide()" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        </div>
 
 </ng-template>

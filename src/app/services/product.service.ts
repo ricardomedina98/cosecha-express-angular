@@ -17,27 +17,29 @@ export class ProductService {
     constructor(private http: HttpClient, private socket: Socket) {        
     }
 
-    getAllProducts(): Observable<Product[]> {
-        
+    getAllProducts(): Observable<Product[]> {     
         return this.http.get<any>(`${environment.url_api}productos`)
         .pipe(
-            map( result => {
-                return JSON.parse(JSON.stringify(result.Productos)).map(item => {                    
+            map( result => {       
+                return JSON.parse(JSON.stringify(result.Productos)).map(item => { 
                     return new Product(
                         item.id_producto,
-                        item.nombre_producto,
-                        this.arrayPosToJSONC(item.Categoria_productos),
-                        this.arrayPosToJSONM(item.Mediciones),
+                        item.nombre_producto,                        
+                        item.Medicione.tipo_medicion,
                         item.existencia,
                         item.existencia_min,
                         item.existencia_max,
                         item.precio_semanal,
-                        item.precio_diario,
                         item.status,
                         item.fecha_creacion,
                         item.creado_por,
                         item.fecha_ultima_modificacion,
-                        item.fecha_modificacion_por
+                        item.fecha_modificacion_por,
+                        item.Equivalencia.id_equivalencia,
+                        item.Equivalencia.equivalencia1,
+                        item.Equivalencia.equivalencia2,
+                        item.Equivalencia.medicionEquiv1,
+                        item.Equivalencia.medicionEquiv2
                     );
                 })
             })
@@ -52,18 +54,22 @@ export class ProductService {
                     return new Product(
                         item.id_producto,
                         item.nombre_producto,
-                        this.arrayPosToJSONC(item.Categoria_productos),
-                        this.arrayPosToJSONM(item.Mediciones),
+                        item.Categoria_productos,
+                        item.Medicion,
                         item.existencia,
                         item.existencia_min,
                         item.existencia_max,
                         item.precio_semanal,
-                        item.precio_diario,
                         item.status,
                         item.fecha_creacion,
                         item.creado_por,
                         item.fecha_ultima_modificacion,
-                        item.fecha_modificacion_por
+                        item.fecha_modificacion_por,
+                        item.Equivalencia.id_equivalencia,
+                        item.Equivalencia.equivalencia1,
+                        item.Equivalencia.equivalencia2,
+                        item.Equivalencia.medicionEquiv1,
+                        item.Equivalencia.medicionEquiv2
                     );
                 })
                 observer.next(request);
@@ -79,8 +85,7 @@ export class ProductService {
             existencia: product.existencia,
             existencia_min: product.existencia_min,
             existencia_max: product.existencia_max,
-            precio_semanal: product.precio_semanal,
-            precio_diario: product.precio_diario
+            precio_semanal: product.precio_semanal
         }
 
         return this.http.put<any>(`${environment.url_api}productos/${product.id_producto}`, data)

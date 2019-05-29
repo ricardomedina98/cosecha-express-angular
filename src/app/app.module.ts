@@ -18,14 +18,15 @@ import { NgZorroAntdModule} from 'ng-zorro-antd';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 import { environment } from '../environments/environment';
- 
+
+
 const config: SocketIoConfig = { url: environment.url_api, options: {} };
 
 
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,

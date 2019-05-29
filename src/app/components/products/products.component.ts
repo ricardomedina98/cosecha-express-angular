@@ -6,6 +6,8 @@ import { ProductService } from '../../services/product.service';
 
 import { Product } from '../../models/product';
 
+
+
 @Component({
     selector: 'app-products',
     templateUrl: './products.component.html',
@@ -17,6 +19,8 @@ export class ProductsComponent implements OnInit {
     public products: Product[] = [];
     public product: Product;
     public productDataSelected;
+
+    searchValue = '';
 
     config = {        
         ignoreBackdropClick: true,
@@ -46,16 +50,20 @@ export class ProductsComponent implements OnInit {
 
     }
 
+    
+
     openModalEdit(templateModalEdit: TemplateRef<any>, data: string) {   
-        this.productDataSelected = JSON.parse(JSON.stringify(data)); 
-        this.product = new Product(this.productDataSelected.id_producto, this.productDataSelected.nombre_producto, this.productDataSelected.categoria, this.productDataSelected.medicion, this.productDataSelected.existencia, this.productDataSelected.existencia_min, this.productDataSelected.existencia_max, this.productDataSelected.precio_semanal, this.productDataSelected.precio_diario, this.productDataSelected.status, this.productDataSelected.fecha_creacion, this.productDataSelected.creado_por, this.productDataSelected.fecha_ultima_modificacion, this.productDataSelected.fecha_modificacion_por);                
+        this.productDataSelected = JSON.parse(JSON.stringify(data));
+        console.log(this.productDataSelected);
+                        
         this.modalRef = this.modalService.show(templateModalEdit, this.config);
     }
 
-    openModalPrecioDiario() {
-
+    openModalEquivalencia(templateModalEquivalencia: TemplateRef<any>, data: string){
+        console.log(data);
+        this.modalRef = this.modalService.show(templateModalEquivalencia, this.config);
     }
-
+    
     
 
     ngOnInit() {

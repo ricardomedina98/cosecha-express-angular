@@ -25,7 +25,8 @@ export class ProductService {
                     return new Product(
                         item.id_producto,
                         item.nombre_producto,                        
-                        item.Medicione.tipo_medicion,
+                        item.Medicione.id_medicion,
+                        this.arrayPosToJSOID(item.Categoria_producto),
                         item.existencia,
                         item.existencia_min,
                         item.existencia_max,
@@ -50,12 +51,12 @@ export class ProductService {
     getProducts(): Observable<Product[]> {
         return this.observable = new Observable((observer)=>{
             this.socket.on('SHOW_PRODUCTS', (data) => { 
-                let request = JSON.parse(JSON.stringify(data.Productos)).map(item => {                                   
+                let request = JSON.parse(JSON.stringify(data.Productos)).map(item => {                               
                     return new Product(
                         item.id_producto,
-                        item.nombre_producto,
-                        item.Categoria_productos,
-                        item.Medicion,
+                        item.nombre_producto,                        
+                        item.Medicione.id_medicion,
+                        this.arrayPosToJSOID(item.Categoria_producto),
                         item.existencia,
                         item.existencia_min,
                         item.existencia_max,
@@ -79,38 +80,63 @@ export class ProductService {
 
     updateProduct(product: Product) {
         let data = {
-            id_categoria: 1,
-            id_medicion: 1,
+            id_categoria: product.id_categoria,
+            id_medicion: product.id_medicion,
             nombre_producto: product.nombre_producto,
             existencia: product.existencia,
             existencia_min: product.existencia_min,
-            existencia_max: product.existencia_max,
-            precio_semanal: product.precio_semanal
+            existencia_max: product.existencia_max
+        }        
+
+        if(data.id_categoria === 'null'){
+            data.id_categoria = null;
         }
 
         return this.http.put<any>(`${environment.url_api}productos/${product.id_producto}`, data)
         .pipe(
-            map(result => {
-                console.log(result);
+            map(result => {                
                 return result;
             })
         );
     }
 
+    addProduct(product: Product){
+        let data = {
+            id_categoria: product.id_categoria,
+            id_medicion: product.id_medicion,
+            nombre_producto: product.nombre_producto,
+            existencia: product.existencia,
+            existencia_min: product.existencia_min,
+            existencia_max: product.existencia_max
+        }        
 
-    arrayPosToJSONC(value: any) {      
-        try {
-            return value[0].nombre_categoria;
-        } catch (error) {
-            return;
-        }  
+        if(data.id_categoria === 'null'){
+            data.id_categoria = null;
+        }        
+
+        return this.http.post<any>(`${environment.url_api}productos`, data)
+        .pipe(
+            map(result => {                
+                return result;
+            })
+        );
     }
 
-    arrayPosToJSONM(value: any) {      
+    deleteProduct(id_producto: string) {
+        return this.http.delete<any>(`${environment.url_api}productos/${id_producto}`)
+        .pipe(
+            map(result => {                
+                return result;
+            })
+        );
+    }
+
+    arrayPosToJSOID(value: any) {    
+        
         try {
-            return value[0].tipo_medicion;
+            return value.id_categoria;
         } catch (error) {
-            return;
+            return null;
         }  
     }
 }

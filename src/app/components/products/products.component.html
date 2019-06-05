@@ -1,9 +1,32 @@
+<mk-box [isRemovable]="false" [isCollapsed]="false">
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <button nz-button nzType="primary" (click)="showModalAgregarProducto()">Agregar producto</button>
+            </div>
+        </div>
+    </div>
+</mk-box>
+
 <div style="background: white">
-    <nz-table #tableProductos [nzData]="products" nzBordered="true" [nzLoading]="isLoading"
-    nzSize="small" nzShowPagination="true">
+    <nz-table #tableProductos [nzData]="products" nzBordered="true" [nzLoading]="isLoading" nzSize="small"
+        nzShowPagination="true">
         <thead>
             <tr>
-                <th>Nombre</th>
+                <th nzCustomFilter> Nombre
+                    <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter
+                        #dropdown>
+                        <i nz-icon nzType="search" class="ant-table-filter-icon"
+                            [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
+                        <div class="search-box">
+                            <input type="text" nz-input placeholder="Buscar producto" (ngModel)="searchValue" />
+                            <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">
+                                Buscar
+                            </button>
+                            <button nz-button nzSize="small" (click)="reset()">Reiniciar</button>
+                        </div>
+                    </nz-dropdown>
+                </th>
                 <th>Existencia</th>
                 <th>Precio General</th>
                 <th>Existencia Minima</th>
@@ -13,186 +36,375 @@
         </thead>
         <tbody>
             <tr *ngFor="let data of tableProductos.data">
-                <td>{{ data.nombre_producto }} {{ data.medicion }}</td>
-                <td>{{ data.existencia }}</td>
-                <td>${{ data.precio_semanal }}</td>
+                <td>{{ data.nombre_producto }}</td>
+                <td>{{ data.existencia }} {{ data.medicion }}</td>
+
+                <ng-container *ngIf="!data.precio_semanal; then thenTemplate; else elseTemplate"></ng-container>
+                <ng-template #thenTemplate>
+                    <td>
+                        <div class="text-danger">Sin asignar</div>
+                    </td>
+                </ng-template>
+                <ng-template #elseTemplate>
+                    <td>${{data.precio_semanal}}</td>
+                </ng-template>
+
                 <td>{{ data.existencia_min }} {{ data.medicion }}</td>
                 <td>{{ data.existencia_max }} {{ data.medicion }}</td>
                 <td style="text-align: center">
-                    <button style="margin-right: 10px" class="btn btn-orange" (click)="openModalEdit(templateModalEquivalencia, data)"><i class="fa fa-calculator" aria-hidden="true"></i></button>                                       
-                    <button style="margin-right: 10px" class="btn btn-success" (click)="openModalEdit(templateModalEdit, data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>                    
-                    <button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                    <button style="margin-right: 10px" class="btn btn-orange" (click)="showModalEquiv(data)"><i class="fa fa-calculator" aria-hidden="true"></i></button>
+                    <button style="margin-right: 10px" class="btn btn-success" (click)="showModalGeneral(data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                    <button class="btn btn-danger" (click)="showDeleteConfirm(data)"><i class="fa fa-trash" aria-hidden="true"></i></button>
                 </td>
             </tr>
         </tbody>
     </nz-table>
 </div>
 
-<ng-template #templateModalEdit>
 
-    <div class="modal-header background-header">
-        <h4 class="modal-title pull-left" style="color: white">Editar Producto</h4>
-        <button style="color: white" type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    
-    <div class="modal-body">
-        <form>
+<!--                      Equivalencias                     -->
+
+
+<nz-modal [(nzVisible)]="isVisibleEquiv" [nzWidth]="600" [nzTitle]="modalTitleEquiv" [nzContent]="modalContentEquiv"
+    [nzFooter]="modalFooterEquiv" (nzOnCancel)="handleCancelEquiv()">
+    <ng-template #modalTitleEquiv>Equivalencias</ng-template>
+
+    <ng-template #modalContentEquiv>
+        <form [formGroup]="equivalenciaForm">
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="">Valor 1</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" formControlName="equivalencia1" maxlength="7"
+                                (onchange)="numericOnly($event)"
+                                [ngClass]="{ 'is-invalid': submittedEquivalencia && fe.equivalencia1.errors }">
+                            <span class="input-group-btn">
+                                <nz-select style="width: 115px;" formControlName="tipoEquiv1" nzShowSearch nzAllowClear
+                                    nzPlaceHolder="Selecionar...">
+                                    <nz-option *ngFor="let medicion of mediciones" nzLabel="{{medicion.tipo_medicion}}"
+                                        nzValue="{{medicion.id_medicion}}"></nz-option>
+                                </nz-select>
+                            </span>
+                        </div>
+                        <div *ngIf="submittedEquivalencia && fe.equivalencia1.errors" class="invalid-feedback d-block">
+                            <div *ngIf="fe.equivalencia1.errors.required" class="text-danger">El valor 1 es requerido
+                            </div>
+                            <div *ngIf="fe.equivalencia1.errors.pattern" class="text-danger">Valor invalido</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="">Valor 2</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" formControlName="equivalencia2" maxlength="7"
+                                (onchange)="numericOnly($event)"
+                                [ngClass]="{ 'is-invalid': submittedEquivalencia && fe.equivalencia2.errors }">
+                            <span class="input-group-btn">
+                                <nz-select style="width: 115px;" formControlName="tipoEquiv2" nzShowSearch nzAllowClear
+                                    nzPlaceHolder="Selecionar...">
+                                    <nz-option *ngFor="let medicion of mediciones" nzLabel="{{medicion.tipo_medicion}}"
+                                        nzValue="{{medicion.id_medicion}}"></nz-option>
+                                </nz-select>
+                            </span>
+                        </div>
+                        <div *ngIf="submittedEquivalencia && fe.equivalencia2.errors" class="invalid-feedback d-block">
+                            <div *ngIf="fe.equivalencia2.errors.required" class="text-danger">El valor 2 es requerido
+                            </div>
+                            <div *ngIf="fe.equivalencia2.errors.pattern" class="text-danger">Valor invalido</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 20px">
+                <div class="form-group">
+                   
+                    <nz-radio-group formControlName="opciones" [(ngModel)]="radioValue" (ngModelChange)="changebutton()">
+                        <div class="col-md-3">
+                            <label for="">Tipo</label>
+                            <div class="input-group">
+                                <nz-select style="width: 120px;" formControlName="tipo" nzShowSearch nzAllowClear nzPlaceHolder="Selecionar...">
+                                    <nz-option nzLabel="+" nzValue="+"></nz-option>
+                                    <nz-option nzLabel="-" nzValue="-"></nz-option>
+                                </nz-select>
+                            </div>
+                        </div>
+                                
+                        <div class="col-sm-3">
+                            <label nz-radio nzValue="a" style="margin-bottom: 5px;">Manual</label>                                        
+                                <div class="input-group" >
+                                    <input formControlName="manual" nz-input placeholder="0.0"/>
+                                </div>
+                        </div>  
+
+                        <div class="col-sm-3">
+                            <label nz-radio nzValue="b" style="margin-bottom: 5px;">Porcentaje</label>
+                            <div class="input-group">
+                                <nz-select style="width: 120px;" formControlName="porcentaje" nzShowSearch nzAllowClear nzPlaceHolder="%">
+                                    <nz-option nzLabel="5%" nzValue="5"></nz-option>
+                                    <nz-option nzLabel="10%" nzValue="10"></nz-option>
+                                    <nz-option nzLabel="15%" nzValue="15"></nz-option>
+                                </nz-select>
+                            </div>
+                        </div>  
+
+                        <div class="col-md-2">
+                        <label for=""></label>
+                            <div class="input-group" >
+                                <button nz-button nzType="primary" style="margin-top: 5px" (click)="AplicarSuma()">Aplicar</button>
+                            </div>
+                        </div>
+                    </nz-radio-group> 
+
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 10px">
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <label for="" >Precio General</label>  
+                        <div class="input-group">   
+                            <input type="text" class="form-control" formControlName="precio_general" style="width: 247%;">                    
+                        </div>  
+                        <span class="label" style="color: #292929; font-style: italic;">Porcentaje asignado: </span>     
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for=""></label>  
+                        <div class="input-group" style="margin-top: 6px;">                        
+                            <button nz-button nzType="primary" (click)="RestaurarPrecioGeneral()"><i class="fa fa-undo" aria-hidden="true"></i></button>                                        
+                        </div>                 
+                    </div>
+                </div>            
+            </div>
+
+        </form>
+
+    </ng-template>
+
+    <ng-template #modalFooterEquiv>
+        <button nz-button nzType="default" (click)="handleCancelEquiv()">Cerrar</button>
+        <button nz-button nzType="primary" (click)="onSubmitEquivalencia()" [nzLoading]="isConfirmLoadingEquiv">Guardar
+            cambios</button>
+    </ng-template>
+</nz-modal>
+
+
+<!--                           General                              -->
+
+
+<nz-modal [(nzVisible)]="isVisibleGeneral" [nzWidth]="800" [nzTitle]="modalTitle" [nzContent]="modalContent"
+    [nzFooter]="modalFooter" (nzOnCancel)="handleCancelGeneral()">
+    <ng-template #modalTitle> Producto</ng-template>
+
+    <ng-template #modalContent>
+        <form [formGroup]="productForm">
             <div class="row">
                 <div class="form-group">
                     <div class="col-md-8">
                         <label for="">Producto</label>
-                        <input type="text" class="form-control" value="{{ productDataSelected.nombre_producto }}">
+                        <input type="text" class="form-control" formControlName="nombre_producto"
+                            [ngClass]="{ 'is-invalid': submittedGeneral && f.nombre_producto.errors }" required>
+                        <div *ngIf="submittedGeneral && f.nombre_producto.errors" class="invalid-feedback d-block">
+                            <div *ngIf="f.nombre_producto.errors.required" class="text-danger">El nombre del producto es
+                                requerido
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-4">
                         <label for="">Existencia</label>
-                        <input type="text" class="form-control" value="{{ productDataSelected.existencia }}">
-                    </div>              
+                        <input type="text" class="form-control" formControlName="existencia"
+                            [ngClass]="{ 'is-invalid': submittedGeneral && f.existencia.errors }">
+                        <div *ngIf="submittedGeneral && f.existencia.errors" class="invalid-feedback d-block">
+                            <div *ngIf="f.existencia.errors.required" class="text-danger">La existencia es requerida
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
+
             <div class="row" style="margin-top: 20px">
                 <div class="form-group">
-    
-                <div class="col-md-3">
-                <label for="">Precio General</label>
-                    <div class="input-group">                  
-                        <input type="text" class="form-control" value="{{ productDataSelected.precio_general }}">
-                            <span class="input-group-btn">
-                                <button class="btn btn-orange" type="button" (click)="childPgeneral.show()"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                            </span>
+
+                    <div class="col-md-3">
+                        <label for="">Existencia Minima</label>
+                        <input type="text" class="form-control" formControlName="existencia_min"
+                            [ngClass]="{ 'is-invalid': submittedGeneral && f.existencia_min.errors }">
+                        <div *ngIf="submittedGeneral && f.existencia_min.errors" class="invalid-feedback d-block">
+                            <div *ngIf="f.existencia_min.errors.required" class="text-danger">La existencia minima es
+                                requerida</div>
+                        </div>
                     </div>
-                </div>                    
 
-                <div class="col-md-3">
-                <label for="">Existencia max.</label>
-                        <input type="text" class="form-control">
-                </div>
-                <div class="col-md-3 ">
-                    <label for="">Existencia min.</label>
-                        <input type="text" class="form-control">
-                </div>
-                </div>
-            </div>            
-        </form>   
-    </div>
-  
-    <div class="modal-footer">          
-        <button type="button" class="btn btn-success pull-left">Guardar cambios</button>
-        <button (click)="modalRef.hide()" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-    </div>
-
-    <div class="modal fade" bsModal #childPgeneral="bs-modal" tabindex="-1" role="dialog" aria-labelledby="dialog-nested-name2">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <div class="modal-header background-header" >
-                  <h4 id="dialog-nested-name2" class="modal-title pull-left" style="color: white">Precio General</h4>
-                  <button type="button" class="close pull-right" aria-label="Close" (click)="childPgeneral.hide()">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-4">
-                        <label for="">Precio General</label>
-                            <div class="input-group">               
-                                <input type="text" class="form-control" value="{{ productDataSelected.precio_general }}">                   
-                            </div>
+                    <div class="col-md-3 ">
+                        <label for="">Existencia Maxima</label>
+                        <input type="text" class="form-control" formControlName="existencia_max"
+                            [ngClass]="{ 'is-invalid': submittedGeneral && f.existencia_max.errors }">
+                        <div *ngIf="submittedGeneral && f.existencia_max.errors" class="invalid-feedback d-block">
+                            <div *ngIf="f.existencia_max.errors.required" class="text-danger">La existencia maxima es
+                                requerida</div>
                         </div>
-                        <div class="col-md-3">
-                        <label for="">% porcentaje</label>
-                            <div class="input-group">                  
-                                <input type="text" class="form-control">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-orange" type="button" ><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                                    </span>
-                            </div>
-                        </div>  
-                        <div class="col-md-3">
-                        <label for="">$ pesos</label>
-                            <div class="input-group">                  
-                                <input type="text" class="form-control">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-orange" type="button" ><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                                    </span>
-                            </div>
-                        </div> 
-                    </div>                 
-                </div>              
-                <div class="modal-footer">          
-                    <button type="button" class="btn btn-success">Ok</button>
-                    <button (click)="childPgeneral.hide()" type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cancelar</button>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="">Medicion</label>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <nz-select nzShowSearch nzPlaceHolder="Selecionar..." formControlName="id_medicion"
+                                    [ngClass]="{ 'is-invalid': submittedGeneral && f.id_medicion.errors }">
+                                    <nz-option *ngFor="let medicion of mediciones" nzLabel="{{medicion.tipo_medicion}}"
+                                        nzValue="{{medicion.id_medicion}}"></nz-option>
+                                </nz-select>
+                            </span>
+                        </div>
+                        <div *ngIf="submittedGeneral && f.id_medicion.errors" class="invalid-feedback d-block">
+                            <div *ngIf="f.id_medicion.errors.required" class="text-danger">El tipo de medicion es
+                                requerida</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="">Categoria</label>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Selecionar..."
+                                    formControlName="id_categoria">
+                                    <nz-option *ngFor="let categoria of categorias"
+                                        nzLabel="{{categoria.nombre_categoria}}" nzValue="{{categoria.id_categoria}}">
+                                    </nz-option>
+                                    <nz-option *ngFor="let categoria of categorias" nzLabel="Ninguna" nzValue="null">
+                                    </nz-option>
+                                </nz-select>
+                            </span>
+                        </div>
+                        <div *ngIf="submittedGeneral && f.id_categoria.errors" class="invalid-feedback d-block">
+                            <div *ngIf="f.id_categoria.errors.required" class="text-danger">El tipo de medicion es
+                                requerida</div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-        </div>
-    </div>
-    
-    <div class="modal fade" bsModal #childPSemanal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="dialog-nested-name2">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <div class="modal-header background-header">
-                    <h4 id="dialog-nested-name2" class="modal-title pull-left" style="color: white">Precio semanal</h4>
-                    <button type="button" class="close pull-right" aria-label="Close" (click)="childPSemanal.hide()">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-4">
-                        <label for="">Precio Semanal</label>
-                            <div class="input-group">               
-                                <input type="text" class="form-control" value="{{ productDataSelected.precio_semanal }}">                   
+        </form>
+    </ng-template>
+
+    <ng-template #modalFooter>
+        <button nz-button nzType="default" (click)="handleCancelGeneral()">Cerrar</button>
+        <button nz-button (click)="onSubmitProduct()" nzType="primary" [nzLoading]="isConfirmLoadingGeneral">Guardar
+            cambios</button>
+    </ng-template>
+</nz-modal>
+
+
+
+<!--                         Agregar Producto                           -->
+
+
+<nz-modal [(nzVisible)]="isVisibleAgregarProductos" [nzWidth]="800" [nzTitle]="modalTitleAgregarProducto"
+    [nzContent]="modalContentAgregarProducto" [nzFooter]="modalFooterAgregarProducto"
+    (nzOnCancel)="handleCancelAgregarProducto()">
+    <ng-template #modalTitleAgregarProducto>Nuevo Producto</ng-template>
+
+    <ng-template #modalContentAgregarProducto>
+        <form [formGroup]="productAgregarForm">
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-8">
+                        <label for="">Producto</label>
+                        <input type="text" class="form-control" formControlName="nombre_producto"
+                            [ngClass]="{ 'is-invalid': submittedAgregarProducto && fa.nombre_producto.errors }" required>
+                        <div *ngIf="submittedAgregarProducto && fa.nombre_producto.errors" class="invalid-feedback d-block">
+                            <div *ngIf="fa.nombre_producto.errors.required" class="text-danger">El nombre del producto
+                                es requerido
                             </div>
                         </div>
-                        <div class="col-md-3">
-                        <label for="">% porcentaje</label>
-                            <div class="input-group">                  
-                                <input type="text" class="form-control">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-orange" type="button" ><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                                    </span>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="">Existencia</label>
+                        <input type="text" class="form-control" formControlName="existencia"
+                            [ngClass]="{ 'is-invalid': submittedAgregarProducto && fa.existencia.errors }">
+                        <div *ngIf="submittedAgregarProducto && fa.existencia.errors" class="invalid-feedback d-block">
+                            <div *ngIf="fa.existencia.errors.required" class="text-danger">La existencia es requerida
                             </div>
-                        </div>  
-                        <div class="col-md-3">
-                        <label for="">$ pesos</label>
-                            <div class="input-group">                  
-                                <input type="text" class="form-control">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-orange" type="button" ><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                                    </span>
-                            </div>
-                        </div> 
-                    </div>  
-                </div>
-                <div class="modal-footer">          
-                    <button type="button" class="btn btn-success">OK</button>
-                    <button (click)="childPSemanal.hide()" type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cancelar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div> 
 
-</ng-template>
+            <div class="row" style="margin-top: 20px">
+                <div class="form-group">
 
-<ng-template #templateModalEquivalencia>
+                    <div class="col-md-3">
+                        <label for="">Existencia Minima</label>
+                        <input type="text" class="form-control" formControlName="existencia_min"
+                            [ngClass]="{ 'is-invalid': submittedAgregarProducto && fa.existencia_min.errors }">
+                        <div *ngIf="submittedAgregarProducto && fa.existencia_min.errors" class="invalid-feedback d-block">
+                            <div *ngIf="fa.existencia_min.errors.required" class="text-danger">La existencia minima es
+                                requerida</div>
+                        </div>
+                    </div>
 
-        <div class="modal-header background-header">
-            <h4 class="modal-title pull-left" style="color: white">Equivalencia del Producto</h4>
-            <button style="color: white" type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        
-        <div class="modal-body">
-            <form>
-                          
-            </form>   
-        </div>
-        
-        <div class="modal-footer">          
-            <button type="button" class="btn btn-success pull-left">Guardar cambios</button>
-            <button (click)="modalRef.hide()" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        </div>
+                    <div class="col-md-3 ">
+                        <label for="">Existencia Maxima</label>
+                        <input type="text" class="form-control" formControlName="existencia_max"
+                            [ngClass]="{ 'is-invalid': submittedAgregarProducto && fa.existencia_max.errors }">
+                        <div *ngIf="submittedAgregarProducto && fa.existencia_max.errors" class="invalid-feedback d-block">
+                            <div *ngIf="fa.existencia_max.errors.required" class="text-danger">La existencia maxima es
+                                requerida</div>
+                        </div>
+                    </div>
 
-</ng-template>
+                    <div class="col-md-3">
+                        <label for="">Medicion</label>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <nz-select nzShowSearch nzPlaceHolder="Selecionar..." formControlName="id_medicion"
+                                    [ngClass]="{ 'is-invalid': submittedAgregarProducto && fa.id_medicion.errors }">
+                                    <nz-option *ngFor="let medicion of mediciones" nzLabel="{{medicion.tipo_medicion}}"
+                                        nzValue="{{medicion.id_medicion}}"></nz-option>
+                                </nz-select>
+                            </span>
+                        </div>
+                        <div *ngIf="submittedAgregarProducto && fa.id_medicion.errors" class="invalid-feedback d-block">
+                            <div *ngIf="fa.id_medicion.errors.required" class="text-danger">El tipo de medicion es
+                                requerida</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="">Categoria</label>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Selecionar..."
+                                    formControlName="id_categoria">
+                                    <nz-option *ngFor="let categoria of categorias"
+                                        nzLabel="{{categoria.nombre_categoria}}" nzValue="{{categoria.id_categoria}}">
+                                    </nz-option>
+                                    <nz-option *ngFor="let categoria of categorias" nzLabel="Ninguna" nzValue="null">
+                                    </nz-option>
+                                </nz-select>
+                            </span>
+                        </div>
+                        <div *ngIf="submittedAgregarProducto && fa.id_categoria.errors" class="invalid-feedback d-block">
+                            <div *ngIf="fa.id_categoria.errors.required" class="text-danger">El tipo de medicion es
+                                requerida</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </ng-template>
+
+    <ng-template #modalFooterAgregarProducto>
+        <button nz-button nzType="default" (click)="handleCancelAgregarProducto()">Cerrar</button>
+        <button nz-button (click)="onSubmitAgregarProducto()" nzType="primary"
+            [nzLoading]="isConfirmLoadingAgregarProductos">Agregar</button>
+    </ng-template>
+</nz-modal>
+
+

@@ -1,13 +1,9 @@
-<p>
-    clients works!
-</p>
-      
-<!--
-<div style="background: white">
-        <nz-table #tableProductos [nzData]="products" nzBordered="true" [nzLoading]="isLoading"
+
+    <div style="background: white">
+        <nz-table #tableClientes [nzData]="products" nzBordered="true" [nzLoading]="isLoading"
         nzSize="small" nzShowPagination="true">
             <thead>
-                <tr>
+                <tr>      
                     <th nzCustomFilter>Nombre
                     <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown>
                         <inz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
@@ -19,10 +15,10 @@
                     </th>
                     <th>Apellido Paterno</th>
                     <th>Apellido Materno</th>
-                    <th>Razon Social</th>
+                    <th>Empresa</th>
                     <th>Dirrecion</th>
-                    <th>Correo</th>
                     <th>Telefono</th>
+                    <th>Correo</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -44,7 +40,6 @@
     </div>
 
 
--->
 
 
 <!--    Lista Precios Cliente

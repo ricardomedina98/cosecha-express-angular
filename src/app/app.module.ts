@@ -19,10 +19,13 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 import { environment } from '../environments/environment';
 
+import { NZ_I18N, es_ES } from 'ng-zorro-antd';
+import { registerLocaleData } from '@angular/common';
+import en from '@angular/common/locales/en';
+registerLocaleData(en);
+
 
 const config: SocketIoConfig = { url: environment.url_api, options: {} };
-
-
 
 @NgModule({
   declarations: [
@@ -44,6 +47,7 @@ const config: SocketIoConfig = { url: environment.url_api, options: {} };
     })
   ],
   providers: [
+    { provide: NZ_I18N, useValue: es_ES },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     LayoutService

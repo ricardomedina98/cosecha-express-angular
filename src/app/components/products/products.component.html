@@ -9,20 +9,14 @@
 </mk-box>
 
 <div style="background: white">
-    <nz-table #tableProductos [nzData]="products" nzBordered="true" [nzLoading]="isLoading" nzSize="small"
-        nzShowPagination="true">
+    <nz-table #tableProductos [nzData]="products" nzBordered="true" [nzLoading]="isLoading" nzSize="small" nzShowPagination="true">
         <thead>
             <tr>
                 <th nzCustomFilter> Nombre
-                    <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter
-                        #dropdown>
-                        <i nz-icon nzType="search" class="ant-table-filter-icon"
-                            [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
+                    <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown><i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
                         <div class="search-box">
-                            <input type="text" nz-input placeholder="Buscar producto" (ngModel)="searchValue" />
-                            <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">
-                                Buscar
-                            </button>
+                            <input type="text" nz-input placeholder="Buscar producto" (ngModel)="searchValue"/>
+                            <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Buscar</button>
                             <button nz-button nzSize="small" (click)="reset()">Reiniciar</button>
                         </div>
                     </nz-dropdown>
@@ -46,7 +40,7 @@
                     </td>
                 </ng-template>
                 <ng-template #elseTemplate>
-                    <td>${{data.precio_semanal}}</td>
+                    <td>${{data.precio_semanal | number}}</td>
                 </ng-template>
 
                 <td>{{ data.existencia_min }} {{ data.medicion }}</td>
@@ -87,10 +81,11 @@
                                 </nz-select>
                             </span>
                         </div>
-                        <div *ngIf="submittedEquivalencia && fe.equivalencia1.errors" class="invalid-feedback d-block">
-                            <div *ngIf="fe.equivalencia1.errors.required" class="text-danger">El valor 1 es requerido
-                            </div>
-                            <div *ngIf="fe.equivalencia1.errors.pattern" class="text-danger">Valor invalido</div>
+                        <div *ngIf="fe.equivalencia1.errors">
+                            <div *ngIf="fe.equivalencia1.errors.pattern" class="text-danger">Valor invalido</div>           
+                        </div>
+                       <div *ngIf="submittedEquivalencia && fe.equivalencia1.errors" class="invalid-feedback d-block">
+                            <div *ngIf="fe.equivalencia1.errors" class="text-danger">El valor 1 es requerido</div>
                         </div>
                     </div>
 
@@ -108,11 +103,12 @@
                                 </nz-select>
                             </span>
                         </div>
-                        <div *ngIf="submittedEquivalencia && fe.equivalencia2.errors" class="invalid-feedback d-block">
-                            <div *ngIf="fe.equivalencia2.errors.required" class="text-danger">El valor 2 es requerido
+                        <div *ngIf="fe.equivalencia2.errors">
+                                <div *ngIf="fe.equivalencia2.errors.pattern" class="text-danger">Valor invalido</div>           
                             </div>
-                            <div *ngIf="fe.equivalencia2.errors.pattern" class="text-danger">Valor invalido</div>
-                        </div>
+                           <div *ngIf="submittedEquivalencia && fe.equivalencia2.errors" class="invalid-feedback d-block">
+                                <div *ngIf="fe.equivalencia2.errors.required" class="text-danger">El valor 2 es requerido</div>
+                            </div>
                     </div>
 
                 </div>
@@ -124,12 +120,15 @@
                     <nz-radio-group formControlName="opciones" [(ngModel)]="radioValue" (ngModelChange)="changebutton()">
                         <div class="col-md-3">
                             <label for="">Tipo</label>
-                            <div class="input-group">
-                                <nz-select style="width: 120px;" formControlName="tipo" nzShowSearch nzAllowClear nzPlaceHolder="Selecionar...">
-                                    <nz-option nzLabel="+" nzValue="+"></nz-option>
-                                    <nz-option nzLabel="-" nzValue="-"></nz-option>
-                                </nz-select>
-                            </div>
+                                <div class="input-group">
+                                    <nz-select style="width: 120px;" formControlName="tipo" nzShowSearch nzAllowClear nzPlaceHolder="Selecionar...">
+                                        <nz-option nzLabel="+" nzValue="+"></nz-option>
+                                        <nz-option nzLabel="-" nzValue="-"></nz-option>
+                                    </nz-select>
+                                </div>
+                                <div *ngIf="aplicar && fe.tipo.errors" class="invalid-feedback d-block">
+                                    <div *ngIf="fe.tipo.errors.required" class="text-danger">Campo requerido</div>
+                                </div>
                         </div>
                                 
                         <div class="col-sm-3">
@@ -146,6 +145,13 @@
                                     <nz-option nzLabel="5%" nzValue="5"></nz-option>
                                     <nz-option nzLabel="10%" nzValue="10"></nz-option>
                                     <nz-option nzLabel="15%" nzValue="15"></nz-option>
+                                    <nz-option nzLabel="20%" nzValue="20"></nz-option>
+                                    <nz-option nzLabel="25%" nzValue="25"></nz-option>
+                                    <nz-option nzLabel="30%" nzValue="30"></nz-option>
+                                    <nz-option nzLabel="35%" nzValue="35"></nz-option>
+                                    <nz-option nzLabel="40%" nzValue="40"></nz-option>
+                                    <nz-option nzLabel="45%" nzValue="45"></nz-option>
+                                    <nz-option nzLabel="50%" nzValue="50"></nz-option>
                                 </nz-select>
                             </div>
                         </div>  
@@ -166,7 +172,7 @@
                     <div class="form-group">
                         <label for="" >Precio General</label>  
                         <div class="input-group">   
-                            <input type="text" class="form-control" formControlName="precio_general" style="width: 247%;">                    
+                            <input type="text" class="form-control" formControlName="precio_general" maxlength="7" style="width: 247%;">                    
                         </div>  
                         <span class="label" style="color: #292929; font-style: italic;">Porcentaje asignado: </span>     
                     </div>
@@ -194,7 +200,11 @@
 </nz-modal>
 
 
+
+
 <!--                           General                              -->
+
+
 
 
 <nz-modal [(nzVisible)]="isVisibleGeneral" [nzWidth]="800" [nzTitle]="modalTitle" [nzContent]="modalContent"
@@ -207,8 +217,7 @@
                 <div class="form-group">
                     <div class="col-md-8">
                         <label for="">Producto</label>
-                        <input type="text" class="form-control" formControlName="nombre_producto"
-                            [ngClass]="{ 'is-invalid': submittedGeneral && f.nombre_producto.errors }" required>
+                        <input type="text" class="form-control" formControlName="nombre_producto" [ngClass]="{ 'is-invalid': submittedGeneral && f.nombre_producto.errors }" required>
                         <div *ngIf="submittedGeneral && f.nombre_producto.errors" class="invalid-feedback d-block">
                             <div *ngIf="f.nombre_producto.errors.required" class="text-danger">El nombre del producto es
                                 requerido
@@ -273,11 +282,15 @@
                             <span class="input-group-btn">
                                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Selecionar..."
                                     formControlName="id_categoria">
-                                    <nz-option *ngFor="let categoria of categorias"
-                                        nzLabel="{{categoria.nombre_categoria}}" nzValue="{{categoria.id_categoria}}">
-                                    </nz-option>
-                                    <nz-option *ngFor="let categoria of categorias" nzLabel="Ninguna" nzValue="null">
-                                    </nz-option>
+                                    <ng-container *ngFor="let categoria of categorias; let first = first; let last = last">
+                                        <nz-option nzLabel="{{categoria.nombre_categoria}}" nzValue="{{categoria.id_categoria}}"></nz-option>
+                                        <ng-container *ngIf="last; then optionNull;"></ng-container>
+
+                                        <ng-template #optionNull>
+                                            <nz-option  nzLabel="Ninguna" nzValue="null"></nz-option>                           
+                                        </ng-template>
+                                    </ng-container>
+                                    
                                 </nz-select>
                             </span>
                         </div>
@@ -288,6 +301,7 @@
                     </div>
 
                 </div>
+
             </div>
         </form>
     </ng-template>
@@ -301,12 +315,15 @@
 
 
 
+
+
 <!--                         Agregar Producto                           -->
 
 
-<nz-modal [(nzVisible)]="isVisibleAgregarProductos" [nzWidth]="800" [nzTitle]="modalTitleAgregarProducto"
-    [nzContent]="modalContentAgregarProducto" [nzFooter]="modalFooterAgregarProducto"
-    (nzOnCancel)="handleCancelAgregarProducto()">
+
+
+
+<nz-modal [(nzVisible)]="isVisibleAgregarProductos" [nzWidth]="800" [nzTitle]="modalTitleAgregarProducto" [nzContent]="modalContentAgregarProducto" [nzFooter]="modalFooterAgregarProducto" (nzOnCancel)="handleCancelAgregarProducto()">
     <ng-template #modalTitleAgregarProducto>Nuevo Producto</ng-template>
 
     <ng-template #modalContentAgregarProducto>
@@ -315,21 +332,16 @@
                 <div class="form-group">
                     <div class="col-md-8">
                         <label for="">Producto</label>
-                        <input type="text" class="form-control" formControlName="nombre_producto"
-                            [ngClass]="{ 'is-invalid': submittedAgregarProducto && fa.nombre_producto.errors }" required>
+                        <input type="text" class="form-control" formControlName="nombre_producto" [ngClass]="{ 'is-invalid': submittedAgregarProducto && fa.nombre_producto.errors }" required>
                         <div *ngIf="submittedAgregarProducto && fa.nombre_producto.errors" class="invalid-feedback d-block">
-                            <div *ngIf="fa.nombre_producto.errors.required" class="text-danger">El nombre del producto
-                                es requerido
-                            </div>
+                            <div *ngIf="fa.nombre_producto.errors.required" class="text-danger">El nombre del producto es requerido</div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <label for="">Existencia</label>
-                        <input type="text" class="form-control" formControlName="existencia"
-                            [ngClass]="{ 'is-invalid': submittedAgregarProducto && fa.existencia.errors }">
+                        <input type="text" class="form-control" formControlName="existencia" [ngClass]="{ 'is-invalid': submittedAgregarProducto && fa.existencia.errors }">
                         <div *ngIf="submittedAgregarProducto && fa.existencia.errors" class="invalid-feedback d-block">
-                            <div *ngIf="fa.existencia.errors.required" class="text-danger">La existencia es requerida
-                            </div>
+                            <div *ngIf="fa.existencia.errors.required" class="text-danger">La existencia es requerida  </div>
                         </div>
                     </div>
                 </div>
@@ -379,13 +391,16 @@
                         <label for="">Categoria</label>
                         <div class="input-group">
                             <span class="input-group-btn">
-                                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Selecionar..."
-                                    formControlName="id_categoria">
-                                    <nz-option *ngFor="let categoria of categorias"
-                                        nzLabel="{{categoria.nombre_categoria}}" nzValue="{{categoria.id_categoria}}">
-                                    </nz-option>
-                                    <nz-option *ngFor="let categoria of categorias" nzLabel="Ninguna" nzValue="null">
-                                    </nz-option>
+                                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Selecionar..." formControlName="id_categoria">
+                                    <ng-container *ngFor="let categoria of categorias; let first = first; let last = last">
+                                        <nz-option nzLabel="{{categoria.nombre_categoria}}" nzValue="{{categoria.id_categoria}}"></nz-option>
+                                        <ng-container *ngIf="last; then optionNull;"></ng-container>
+
+                                        <ng-template #optionNull>
+                                            <nz-option  nzLabel="Ninguna" nzValue="null"></nz-option>                           
+                                        </ng-template>
+                                    </ng-container>
+
                                 </nz-select>
                             </span>
                         </div>
@@ -406,5 +421,3 @@
             [nzLoading]="isConfirmLoadingAgregarProductos">Agregar</button>
     </ng-template>
 </nz-modal>
-
-

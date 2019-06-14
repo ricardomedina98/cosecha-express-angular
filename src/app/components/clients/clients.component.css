@@ -1,17 +1,40 @@
+.btn-orange{
+    color: #fff;
+    background-color: #ffab00; 
+    border-color: #e9c13e;
+}
+
+.btn-enviar{
+  color: #fff;
+  background-color: #2EC458; 
+  border-color: #2EC458;
+}
+
 .search-box {
-    padding: 8px;
-  }
+  padding: 8px;
+}
 
-  .search-box input {
-    width: 188px;
-    margin-bottom: 8px;
-    display: block;
-  }
+.search-box input {
+  width: 188px;
+  margin-bottom: 8px;
+  display: block;
+}
 
-  .search-box button {
-    width: 90px;
-  }
+.search-box button {
+  width: 90px;
+}
 
-  .search-button {
-    margin-right: 8px;
-  }
+.search-button {
+  margin-right: 8px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  border-top: 1px solid rgb(232, 232, 232);
+  padding: 10px 16px;
+  text-align: right;
+  left: 0px;
+  background: #fff;
+}

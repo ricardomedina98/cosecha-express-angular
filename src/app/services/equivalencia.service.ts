@@ -23,7 +23,10 @@ export class EquivalenciaService {
       id_producto: equivalencia.id_producto,
       porcentaje: equivalencia.porcentaje
     }
-    console.log(data);
+
+    if(data.porcentaje === "" || data.porcentaje === "null"){
+      data.porcentaje = null;
+    }
 
     return this.http.put<any>(`${environment.url_api}productos/equivalencias/${equivalencia.id_producto}`, data)
     .pipe(

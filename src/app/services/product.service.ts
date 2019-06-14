@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
+
 import { Product } from '../models/product';
 import { Observable } from 'rxjs';
 
@@ -21,7 +22,7 @@ export class ProductService {
         return this.http.get<any>(`${environment.url_api}productos`)
         .pipe(
             map( result => {       
-                return JSON.parse(JSON.stringify(result.Productos)).map(item => { 
+                return JSON.parse(JSON.stringify(result.Productos)).map(item => {                     
                     return new Product(
                         item.id_producto,
                         item.nombre_producto,                        
@@ -51,7 +52,7 @@ export class ProductService {
     getProducts(): Observable<Product[]> {
         return this.observable = new Observable((observer)=>{
             this.socket.on('SHOW_PRODUCTS', (data) => { 
-                let request = JSON.parse(JSON.stringify(data.Productos)).map(item => {                               
+                let request = JSON.parse(JSON.stringify(data.Productos)).map(item => {                                            
                     return new Product(
                         item.id_producto,
                         item.nombre_producto,                        

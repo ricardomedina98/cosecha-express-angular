@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { formatNumber } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+
 
 import { MedicionService } from '../../services/medicion.service';
 import { ProductService } from '../../services/product.service';
@@ -35,6 +37,8 @@ export class ProductsComponent implements OnInit {
     submittedGeneral = false;
     submittedAgregarProducto = false;
     
+    aplicar = false;
+
     radioValue = 'a';
     disabled = true;
     disabled2 = false;
@@ -83,8 +87,8 @@ export class ProductsComponent implements OnInit {
 
         this.productService.getProducts()
         .subscribe(data => {
-            this.products = data;
             console.log(data);
+            this.products = data;
         }, error => {
             console.log(error);
         });
@@ -121,7 +125,7 @@ export class ProductsComponent implements OnInit {
             opciones: [''],
             porcentaje: [''],
             manual: [''],
-            tipo: [''],
+            tipo: ['', Validators.required],
             tipoEquiv1: ['', Validators.required],
             tipoEquiv2: ['', Validators.required],
             precio_general: ['', Validators.required]
@@ -149,12 +153,21 @@ export class ProductsComponent implements OnInit {
         this.productDataSelected = JSON.parse(JSON.stringify(data));
         this.equivalenciaForm.controls['equivalencia1'].setValue(this.productDataSelected.equivalencia1);
         this.equivalenciaForm.controls['equivalencia2'].setValue(this.productDataSelected.equivalencia2);        
+        this.equivalenciaForm.controls['tipoEquiv1'].setValue(String(this.productDataSelected.equivalencia1Med));        
+        this.equivalenciaForm.controls['tipoEquiv2'].setValue(String(this.productDataSelected.equivalencia2Med));      
         this.equivalenciaForm.controls['precio_general'].setValue(this.productDataSelected.precio_semanal);
+        this.equivalenciaForm.get('tipo').setValue(null);
+        this.equivalenciaForm.get('porcentaje').setValue(null);
+        this.radioValue = 'a';
         this.isVisibleEquiv = true;
     }
 
     handleCancelEquiv(): void {
+        this.aplicar = false;
+        this.submittedEquivalencia = false;
         this.isVisibleEquiv = false;
+        this.radioValue = 'a';      
+        this.equivalenciaForm.get('tipo').setValue(null);  
     }
 
     showModalGeneral(data: string): void {
@@ -164,12 +177,19 @@ export class ProductsComponent implements OnInit {
         this.productForm.controls['existencia_min'].setValue(this.productDataSelected.existencia_min);
         this.productForm.controls['existencia_max'].setValue(this.productDataSelected.existencia_max);       
         this.productForm.controls['id_medicion'].setValue(String(this.productDataSelected.id_medicion));
-        this.productForm.controls['id_categoria'].setValue(String(this.productDataSelected.id_categoria));        
+        this.productForm.controls['id_categoria'].setValue(String(this.productDataSelected.id_categoria)); 
+         
         this.isVisibleGeneral = true;
     }
 
     handleCancelGeneral(): void {
         this.isVisibleGeneral = false;
+        this.productForm.controls['nombre_producto'].setValue(null);
+        this.productForm.controls['existencia'].setValue(null);
+        this.productForm.controls['existencia_min'].setValue(null);
+        this.productForm.controls['existencia_max'].setValue(null);       
+        this.productForm.controls['id_medicion'].setValue(null);
+        this.productForm.controls['id_categoria'].setValue(null);     
     }
 
     showModalAgregarProducto(): void {
@@ -184,7 +204,6 @@ export class ProductsComponent implements OnInit {
     get fe() { return this.equivalenciaForm.controls; }
     get fa() { return this.productAgregarForm.controls; }
 
-    
 
     reset(): void {
         this.searchValue = '';
@@ -229,8 +248,7 @@ export class ProductsComponent implements OnInit {
         .subscribe(result => {
             console.log(result);
             this.isConfirmLoadingGeneral = false;
-            this.toastr.success('Producto actualizado!');            
-            
+            this.toastr.success('Producto actualizado!');           
         }, error => {
             this.isConfirmLoadingGeneral = false;
             this.toastr.error('Hubo un error al actualizar el producto');
@@ -240,8 +258,9 @@ export class ProductsComponent implements OnInit {
     onSubmitEquivalencia() {        
         this.submittedEquivalencia = true;
 
-        if (this.equivalenciaForm.invalid) {
-            console.log('invalid');
+        if (this.equivalenciaForm.get('equivalencia1').invalid && this.equivalenciaForm.get('equivalencia2').invalid && 
+        this.equivalenciaForm.get('tipoEquiv1').invalid && this.equivalenciaForm.get('tipoEquiv2').invalid && 
+        this.equivalenciaForm.get('precio_general').invalid) {            
             return;
         }
 
@@ -252,8 +271,7 @@ export class ProductsComponent implements OnInit {
             porcentaje = this.equivalenciaForm.get('manual').value;
         } else if(this.equivalenciaForm.get('opciones').value === 'b') {
             porcentaje = this.equivalenciaForm.get('porcentaje').value;
-        }
-        console.log("ProductsComponent -> onSubmitEquivalencia -> porcentaje", porcentaje)
+        }        
 
         let equivalencia = new Equivalencia(
             this.equivalenciaForm.get('precio_general').value,
@@ -268,14 +286,15 @@ export class ProductsComponent implements OnInit {
         this.equivalenciaService.updateEquivalencia(equivalencia)
         .subscribe(result => {
             console.log(result);
-            setTimeout(() => {
-                this.isVisibleEquiv = false;
-                this.isConfirmLoadingEquiv= false;
-                this.toastr.success('Precio actualizado!');
-            }, 2000);
+            
+            this.isVisibleEquiv = false;
+            this.isConfirmLoadingEquiv= false;
+            this.toastr.success('Precio actualizado!');
+            
             
         }, error => {
-            console.log(error);
+            this.isConfirmLoadingEquiv= false;
+            this.toastr.error('Hubo un error al actualizar la equivalencia');       
         })
     }
 
@@ -303,7 +322,8 @@ export class ProductsComponent implements OnInit {
         .subscribe(result => {
             console.log(result);                       
             this.isConfirmLoadingAgregarProductos = false;
-            this.toastr.success('Producto Agregado!');            
+            this.toastr.success('Producto Agregado!');     
+            //this.isVisibleAgregarProductos = false;       
             
         }, error => {
             this.isConfirmLoadingAgregarProductos = false;
@@ -354,6 +374,13 @@ export class ProductsComponent implements OnInit {
     }
 
     AplicarSuma(){
+
+        this.aplicar =  true;
+
+        if(this.equivalenciaForm.get('equivalencia1').invalid && this.equivalenciaForm.get('equivalencia2').invalid && this.equivalenciaForm.get('tipo').invalid) {
+            return;
+        }
+        
         try {
             let resultado = this.equivalenciaForm.get('equivalencia1').value / this.equivalenciaForm.get('equivalencia2').value;
             let opcion = this.equivalenciaForm.get('opciones').value;
@@ -374,7 +401,7 @@ export class ProductsComponent implements OnInit {
                 precio_general = resultado - (opcionVal * (resultado/100));
             }
             
-            this.equivalenciaForm.controls['precio_general'].setValue(precio_general);
+            this.equivalenciaForm.controls['precio_general'].setValue(formatNumber(precio_general, 'en'));
         } catch (error) {
             console.log(error);
         }

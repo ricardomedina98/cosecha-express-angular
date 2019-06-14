@@ -15,7 +15,6 @@ import { LayoutModule } from 'angular-admin-lte';
 import { LoadingPageModule, MaterialBarModule } from 'angular-loading-page';
 import { adminLteConf } from '../admin-lte.conf';
 
-
 @NgModule({
   declarations: [HeaderInnerComponent, SidebarLeftInnerComponent, SidebarRightInnerComponent, CoreComponent],
   imports: [

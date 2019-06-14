@@ -15,7 +15,7 @@
                 <th nzCustomFilter> Nombre
                     <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown><i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
                         <div class="search-box">
-                            <input type="text" nz-input placeholder="Buscar producto" (ngModel)="searchValue"/>
+                            <input type="text" nz-input placeholder="Buscar producto" [(ngModel)]="searchValue"/>
                             <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Buscar</button>
                             <button nz-button nzSize="small" (click)="reset()">Reiniciar</button>
                         </div>
@@ -46,9 +46,10 @@
                 <td>{{ data.existencia_min }} {{ data.medicion }}</td>
                 <td>{{ data.existencia_max }} {{ data.medicion }}</td>
                 <td style="text-align: center">
-                    <button style="margin-right: 10px" class="btn btn-orange" (click)="showModalEquiv(data)"><i class="fa fa-calculator" aria-hidden="true"></i></button>
-                    <button style="margin-right: 10px" class="btn btn-success" (click)="showModalGeneral(data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                    <button class="btn btn-danger" (click)="showDeleteConfirm(data)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                    <button style="margin-right: 10px" nzTitle="Calcular" nzPlacement="topLeft" nz-tooltip class="btn btn-orange" (click)="showModalEquiv(data)"><i class="fa fa-calculator" aria-hidden="true"></i></button>
+                    <button style="margin-right: 10px" nzTitle="Editar" nzPlacement="topLeft" nz-tooltip class="btn btn-success" (click)="showModalGeneral(data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                    <button style="margin-right: 10px" nzTitle="Eliminar" nzPlacement="topLeft" nz-tooltip class="btn btn-danger" (click)="showDeleteConfirm(data)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                    <button class="btn btn-grafica" nzTitle="En desarrrollo" nzPlacement="topLeft" nz-tooltip><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
                 </td>
             </tr>
         </tbody>
@@ -56,7 +57,9 @@
 </div>
 
 
-<!--                      Equivalencias                     -->
+
+<!--                                          Equivalencias                     -->
+
 
 
 <nz-modal [(nzVisible)]="isVisibleEquiv" [nzWidth]="600" [nzTitle]="modalTitleEquiv" [nzContent]="modalContentEquiv"

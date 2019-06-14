@@ -8,7 +8,7 @@ import { MedicionService } from '../../services/medicion.service';
 import { ProductService } from '../../services/product.service';
 import { CategoriaService } from '../../services/categoria.service';
 import { EquivalenciaService } from '../../services/equivalencia.service';
-import { NzModalService } from 'ng-zorro-antd';
+import { NzModalService, NzToolTipModule } from 'ng-zorro-antd';
 
 
 import { Product } from '../../models/product';
@@ -25,6 +25,7 @@ export class ProductsComponent implements OnInit {
     isLoading: boolean = true;
    
     public products: Product[] = [];
+    public productsBackup: Product[] = [];
     public product: Product;
     public productDataSelected: Product;
     public mediciones: Medicion[];
@@ -47,9 +48,6 @@ export class ProductsComponent implements OnInit {
 
     searchValue = '';
 
-    listOfDisplayData = [];
-
-
     isVisibleEquiv = false;
     isConfirmLoadingEquiv = false;
 
@@ -59,9 +57,6 @@ export class ProductsComponent implements OnInit {
     isVisibleAgregarProductos = false;
     isConfirmLoadingAgregarProductos = false;
     
-    
-    sortName: string | null = null;
-    sortValue: string | null = null;
     listOfProducts: string[] = [];
 
 
@@ -77,6 +72,7 @@ export class ProductsComponent implements OnInit {
 
         this.productService.getAllProducts()
         .subscribe(request => {
+            this.productsBackup = request;
             this.products = request;
             console.log(request);
             this.isLoading = false;
@@ -87,7 +83,7 @@ export class ProductsComponent implements OnInit {
 
         this.productService.getProducts()
         .subscribe(data => {
-            console.log(data);
+            this.productsBackup = data;
             this.products = data;
         }, error => {
             console.log(error);
@@ -156,7 +152,6 @@ export class ProductsComponent implements OnInit {
         this.equivalenciaForm.controls['tipoEquiv1'].setValue(String(this.productDataSelected.equivalencia1Med));        
         this.equivalenciaForm.controls['tipoEquiv2'].setValue(String(this.productDataSelected.equivalencia2Med));      
         this.equivalenciaForm.controls['precio_general'].setValue(this.productDataSelected.precio_semanal);
-        this.equivalenciaForm.get('tipo').setValue(null);
         this.equivalenciaForm.get('porcentaje').setValue(null);
         this.radioValue = 'a';
         this.isVisibleEquiv = true;
@@ -184,46 +179,66 @@ export class ProductsComponent implements OnInit {
 
     handleCancelGeneral(): void {
         this.isVisibleGeneral = false;
+
         this.productForm.controls['nombre_producto'].setValue(null);
         this.productForm.controls['existencia'].setValue(null);
         this.productForm.controls['existencia_min'].setValue(null);
-        this.productForm.controls['existencia_max'].setValue(null);       
-        this.productForm.controls['id_medicion'].setValue(null);
-        this.productForm.controls['id_categoria'].setValue(null);     
+        this.productForm.controls['existencia_max'].setValue(null);   
+        this.productForm.get('id_medicion').setValue(null);
+        this.productForm.get('id_categoria').setValue(null);     
     }
 
     showModalAgregarProducto(): void {
         this.isVisibleAgregarProductos = true;
+
+        this.productAgregarForm.get('nombre_producto').setValue(null); 
+        this.productAgregarForm.get('existencia').setValue(null);  
+        this.productAgregarForm.get('existencia_max').setValue(null);  
+        this.productAgregarForm.get('existencia_min').setValue(null);  
+        this.productAgregarForm.get('medicion').setValue(null);  
+        this.productAgregarForm.get('id_categoria').setValue(null); 
     }
 
     handleCancelAgregarProducto(): void {
-        this.isVisibleAgregarProductos = false;
+        this.isVisibleAgregarProductos = false;  
     }
 
     get f() { return this.productForm.controls; }
     get fe() { return this.equivalenciaForm.controls; }
     get fa() { return this.productAgregarForm.controls; }
 
-
-    reset(): void {
-        this.searchValue = '';
-        this.search();
+    reset(): void{
+        this.products = this.productsBackup;
     }
 
-    sort(sortName: string, value: string): void {
-        this.sortName = sortName;
-        this.sortValue = value;
-        this.search();
+    search(): void {        
+        this.products = this.transform(this.products, this.searchValue);
     }
 
-    filterAddressChange(value: string[]): void {
-        this.listOfProducts = value;
-        this.search();
-    }
-
-    search(): void {
-        this.listOfDisplayData = this.products;
-        this.listOfDisplayData.filter(element => element === 'Papa Blanca');
+    transform(itemList: Product[], searchKeyword: string): Product[] {
+        if (!itemList)
+          return [];
+        if (!searchKeyword)
+          return itemList;
+        let filteredList = [];
+        if (itemList.length > 0) {
+          searchKeyword = searchKeyword.toLowerCase();
+          itemList.forEach(item => {
+            //Object.values(item) => gives the list of all the property values of the 'item' object
+            let propValueList = Object.values(item);
+            for(let i=0;i<propValueList.length;i++)
+            {
+              if (propValueList[i]) {
+                if (propValueList[i].toString().toLowerCase().indexOf(searchKeyword) > -1)
+                {
+                  filteredList.push(item);
+                  break;
+                }
+              }
+            }
+          });
+        }
+        return filteredList;
     }
 
     onSubmitProduct() {        
@@ -248,7 +263,9 @@ export class ProductsComponent implements OnInit {
         .subscribe(result => {
             console.log(result);
             this.isConfirmLoadingGeneral = false;
-            this.toastr.success('Producto actualizado!');           
+            this.isVisibleGeneral =  false;
+            this.toastr.success('Producto actualizado!');     
+
         }, error => {
             this.isConfirmLoadingGeneral = false;
             this.toastr.error('Hubo un error al actualizar el producto');
@@ -322,13 +339,20 @@ export class ProductsComponent implements OnInit {
         .subscribe(result => {
             console.log(result);                       
             this.isConfirmLoadingAgregarProductos = false;
-            this.toastr.success('Producto Agregado!');     
-            //this.isVisibleAgregarProductos = false;       
-            
-        }, error => {
+            this.isVisibleAgregarProductos = false;
+            this.toastr.success('Producto Agregado!');  
+
+        }, err => {
             this.isConfirmLoadingAgregarProductos = false;
-            this.toastr.error('Hubo un error al agregar el producto');            
+
+            if (err.error.msg.error.fields) {
+                if(err.error.msg.error.fields.nombre_producto)
+                    this.toastr.error('El producto ingresado ya existe.');             
+            } else {
+                this.toastr.error('Hubo un error al agregar el producto');  
+            } 
         })
+        this.submittedAgregarProducto = false;
     }
 
     showDeleteConfirm(data: string): void {

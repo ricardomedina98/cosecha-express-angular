@@ -18,9 +18,9 @@
                             #dropdown>
                             <i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
                             <div class="search-box">
-                                <input type="text" nz-input placeholder="Buscar producto" (ngModel)="searchValue" />
-                                <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Buscar </button>
-                                <button nz-button nzSize="small" (click)="reset()">Reiniciar</button>
+                                <input type="text" nz-input placeholder="Buscar producto" [(ngModel)]="searchValueListaCliente" />
+                                <button nz-button nzSize="small" nzType="primary" (click)="searchListaCliente()" class="search-button">Buscar </button>
+                                <button nz-button nzSize="small" (click)="resetListaCliente()">Reiniciar</button>
                             </div>
                         </nz-dropdown>
                     </th>
@@ -41,9 +41,9 @@
                     <td >{{ data.correo_cliente }}</td>
                     <td >{{ data.telefono_cliente }}</td>
                     <td style="text-align: center">
-                        <button style="margin-right: 10px" class="btn btn-success" (click)="showModalListaCliente(data)"><i class="fa fa-list-ul" aria-hidden="true"></i></button>                    
-                        <button style="margin-right: 10px" class="btn btn-success" (click)="showModalCliente(data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>                    
-                        <button class="btn btn-danger" (click)="showDeleteConfirm(data)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                        <button style="margin-right: 10px" nzTitle="Lista de productos" nzPlacement="topLeft" nz-tooltip class="btn btn-success" (click)="showModalListaCliente(data)"><i class="fa fa-list-ul" aria-hidden="true"></i></button>                    
+                        <button style="margin-right: 10px" nzTitle="Editar" nzPlacement="topLeft" nz-tooltip class="btn btn-success" (click)="showModalCliente(data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>                    
+                        <button class="btn btn-danger" nzTitle="Eliminar" nzPlacement="topLeft" nz-tooltip (click)="showDeleteConfirm(data)"><i class="fa fa-trash" aria-hidden="true"></i></button>
                     </td>
                 </tr>
             </tbody>
@@ -282,12 +282,10 @@
       <thead>
         <tr>
           <th nzCustomFilter> Nombre
-            <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown>
-              <i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
-              <div class="search-box">
-                <input type="text" nz-input placeholder="Buscar producto" (ngModel)="searchValue" />
-                <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Buscar </button>
-                <button nz-button nzSize="small" (click)="reset()">Reiniciar</button>
+            <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown><i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i><div class="search-box">
+                <input type="text" nz-input placeholder="Buscar producto" (ngModel)="searchValueListaProductosCliente"/>
+                <button nz-button nzSize="small" nzType="primary" (click)="searchListaProductosCliente()" class="search-button">Buscar </button>
+                <button nz-button nzSize="small" (click)="resetListaProductosCliente()">Reiniciar</button>
               </div>
             </nz-dropdown>
           </th>

@@ -24,9 +24,11 @@ export class ClientsComponent implements OnInit {
     isLoadingClientProducts: boolean = true;
     isLoadingProducts: boolean = true;
 
+    public clientBackup: Cliente[] = [];
     public clients: Cliente[] = [];
     public client: Cliente;
 
+    public productsBackup: Product[] = [];
     public products: Product[] = [];
     public product: Product;
 
@@ -45,7 +47,11 @@ export class ClientsComponent implements OnInit {
     clientForm: FormGroup;
     precioForm: FormGroup;
 
-    searchValue = '';
+    searchValueListaProductos = '';
+    searchValueListaProductosCliente = '';
+    searchValueListaCliente = '';
+
+
     aplicar = false;
     aplicarClienteProducto = false;
     
@@ -105,6 +111,7 @@ export class ClientsComponent implements OnInit {
         this.clienteService.getClientes()
             .subscribe(request => {
                 this.clients = request;
+                this.clientBackup = request;
                 console.log(request);
                 this.isLoading = false;
             },
@@ -115,6 +122,7 @@ export class ClientsComponent implements OnInit {
 
         this.productService.getProducts()
             .subscribe(data => {
+                this.productsBackup = data;
                 console.log(data);
                 this.products = data;
             }, error => {
@@ -165,39 +173,16 @@ export class ClientsComponent implements OnInit {
         });
     }
 
-
-/*
-    search($eventCliente: Cliente[]): void {
-        //this.listOfDisplayData = $eventCliente; 
-        //this.listOfDisplayData.filter(element => element === 'Hugo Guerrero');
-    }
-
-    reset(): void {
-        this.searchValue = '';
-        this.search();
-    }
-
-    sort(sortName: string, value: string): void {
-        this.sortName = sortName;
-        this.sortValue = value;
-        this.search();
-    }
-
-    filterAddressChange(value: string[]): void {
-        this.listOfClients = value;
-        this.search();
-    }
-*/
     showModalCliente(data: string): void {
-      this.clientDataSelected = JSON.parse(JSON.stringify(data));  
-   
-      this.clientForm.controls['nombre_cliente'].setValue(this.clientDataSelected.nombre_cliente);
-      this.clientForm.controls['apellido1_cliente'].setValue(this.clientDataSelected.apellido1_cliente);
-      this.clientForm.controls['apellido2_cliente'].setValue(this.clientDataSelected.apellido2_cliente);
-      this.clientForm.controls['nombre_empresa_cliente'].setValue(this.clientDataSelected.nombre_empresa_cliente);       
-      this.clientForm.controls['correo_cliente'].setValue(String(this.clientDataSelected.correo_cliente));
-      this.clientForm.controls['telefono_cliente'].setValue(String(this.clientDataSelected.telefono_cliente));        
-      this.isVisibleCliente = true;     
+        this.clientDataSelected = JSON.parse(JSON.stringify(data));  
+    
+        this.clientForm.controls['nombre_cliente'].setValue(this.clientDataSelected.nombre_cliente);
+        this.clientForm.controls['apellido1_cliente'].setValue(this.clientDataSelected.apellido1_cliente);
+        this.clientForm.controls['apellido2_cliente'].setValue(this.clientDataSelected.apellido2_cliente);
+        this.clientForm.controls['nombre_empresa_cliente'].setValue(this.clientDataSelected.nombre_empresa_cliente);       
+        this.clientForm.controls['correo_cliente'].setValue(String(this.clientDataSelected.correo_cliente));
+        this.clientForm.controls['telefono_cliente'].setValue(String(this.clientDataSelected.telefono_cliente));        
+        this.isVisibleCliente = true;     
     }
 
     handleCancelCliente(): void {
@@ -206,6 +191,13 @@ export class ClientsComponent implements OnInit {
 
     showModalAgregarCliente(): void {
       this.isVisibleAgregarCliente = true;
+        
+      this.clientForm.get('nombre_cliente').setValue(null);
+      this.clientForm.get('apellido1_cliente').setValue(null);
+      this.clientForm.get('apellido2_cliente').setValue(null);
+      this.clientForm.get('nombre_empresa_cliente').setValue(null);
+      this.clientForm.get('correo_cliente').setValue(null);
+      this.clientForm.get('telefono_cliente').setValue(null);
     }
 
     handleCancelAgregarCliente(): void {
@@ -227,8 +219,7 @@ export class ClientsComponent implements OnInit {
             this.isVisibleListaCliente = true;
         } catch (error) {
             
-        }
-        
+        }     
     }
   
     handleCancelListaCliente(): void {
@@ -237,7 +228,6 @@ export class ClientsComponent implements OnInit {
     }
 
     showModalListaProducto(): void {
-   
         this.isVisibleListaProducto = true; 
         this.mapOfCheckedId = [];
         this.productService.getAllProducts()
@@ -249,6 +239,46 @@ export class ClientsComponent implements OnInit {
                 console.log(error);
             }
         );   
+    }
+    
+    resetListaProductosCliente(): void{
+        this.products = this.productsBackup;
+    }
+
+    searchListaProductosCliente(): void {        
+        this.products = this.transformSearch(this.products, this.searchValueListaProductosCliente, 'nombre_producto');
+    }
+   
+    resetListaCliente(): void{
+        this.clients = this.clientBackup;
+    }
+
+    searchListaCliente(): void {        
+        this.clients = this.transformSearch(this.clients, this.searchValueListaCliente, 'nombre_cliente');
+    }
+
+    transformSearch(itemList: any, searchKeyword: string, nombre_columna: string)  {
+        if (!itemList)
+          return [];
+        if (!searchKeyword)
+          return itemList;
+        let filteredList = [];
+        if (itemList.length > 0) {
+          searchKeyword = searchKeyword.toLowerCase();
+          itemList.forEach(item => {                
+                let columna = item[nombre_columna];
+                for(let i=0;i<columna.length;i++)
+                {                
+                    if (columna) {
+                        if (columna.toString().toLowerCase().indexOf(searchKeyword) > -1) {
+                            filteredList.push(item);
+                            break;
+                        }
+                    }
+                }
+          });
+        }
+        return filteredList;
     }
   
     handleCancelListaProducto(): void {
@@ -436,8 +466,6 @@ export class ClientsComponent implements OnInit {
     onSubmitAgregarCliente(){
         this.submittedAgregarCliente =  true;
 
-        console.log(this.clientAgregarForm);
-
         if(this.clientAgregarForm.invalid) {
             return;
         }
@@ -470,8 +498,9 @@ export class ClientsComponent implements OnInit {
             this.clients = [...this.clients];
                 
             this.isConfirmLoadingAgregarCliente = false;
-            this.toastr.success('Cliente Agregado!');            
-            
+            this.isVisibleAgregarCliente = false;
+            this.toastr.success('Cliente Agregado!');    
+
         }, err => {
             this.isConfirmLoadingAgregarCliente = false;
 
@@ -486,6 +515,7 @@ export class ClientsComponent implements OnInit {
                 this.toastr.error('Hubo un error al agregar el cliente');  
             }                     
         })
+        this.submittedAgregarCliente = false;
     }
 
     onSubmitCliente() {        

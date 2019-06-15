@@ -211,7 +211,7 @@ export class ProductsComponent implements OnInit {
         this.products = this.productsBackup;
     }
 
-    search(): void {        
+    search(): void {
         this.products = this.transform(this.products, this.searchValue);
     }
 

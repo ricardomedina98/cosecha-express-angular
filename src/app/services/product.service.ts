@@ -31,7 +31,7 @@ export class ProductService {
                         item.existencia,
                         item.existencia_min,
                         item.existencia_max,
-                        item.precio_semanal,
+                        this.convertTwoDecimal(item.precio_semanal),
                         item.status,
                         item.fecha_creacion,
                         item.creado_por,
@@ -41,7 +41,8 @@ export class ProductService {
                         item.Equivalencia.equivalencia1,
                         item.Equivalencia.equivalencia2,
                         item.Equivalencia.medicionEquiv1,
-                        item.Equivalencia.medicionEquiv2
+                        item.Equivalencia.medicionEquiv2,
+                        this.arrayPosToJSOMedcion(item.Medicione)
                     );
                 })
             })
@@ -61,7 +62,7 @@ export class ProductService {
                         item.existencia,
                         item.existencia_min,
                         item.existencia_max,
-                        item.precio_semanal,
+                        this.convertTwoDecimal(item.precio_semanal),
                         item.status,
                         item.fecha_creacion,
                         item.creado_por,
@@ -71,7 +72,8 @@ export class ProductService {
                         item.Equivalencia.equivalencia1,
                         item.Equivalencia.equivalencia2,
                         item.Equivalencia.medicionEquiv1,
-                        item.Equivalencia.medicionEquiv2
+                        item.Equivalencia.medicionEquiv2,
+                        this.arrayPosToJSOMedcion(item.Medicione)
                     );
                 })
                 observer.next(request);
@@ -140,4 +142,28 @@ export class ProductService {
             return null;
         }  
     }
+
+    arrayPosToJSOMedcion(value: any) {    
+        
+        try {
+            return value.tipo_medicion;
+        } catch (error) {
+            return null;
+        }  
+    }
+
+    convertTwoDecimal(value: any) {
+        try {
+            if(value != null) {
+                return Number(value).toFixed(2);
+            } else {
+                return null;
+            }
+            
+        } catch (error) {
+            return null;
+        }  
+    }
+
+    
 }

@@ -85,6 +85,7 @@ export class ProductsComponent implements OnInit {
         .subscribe(data => {
             this.productsBackup = data;
             this.products = data;
+            console.log(data);
         }, error => {
             console.log(error);
         });
@@ -122,8 +123,8 @@ export class ProductsComponent implements OnInit {
             porcentaje: [''],
             manual: [''],
             tipo: ['', Validators.required],
-            tipoEquiv1: ['', Validators.required],
-            tipoEquiv2: ['', Validators.required],
+            tipoEquiv1: [''],
+            tipoEquiv2: [''],
             precio_general: ['', Validators.required]
         });
 
@@ -148,21 +149,35 @@ export class ProductsComponent implements OnInit {
     showModalEquiv(data: string): void {
         this.productDataSelected = JSON.parse(JSON.stringify(data));
         this.equivalenciaForm.controls['equivalencia1'].setValue(this.productDataSelected.equivalencia1);
-        this.equivalenciaForm.controls['equivalencia2'].setValue(this.productDataSelected.equivalencia2);        
-        this.equivalenciaForm.controls['tipoEquiv1'].setValue(String(this.productDataSelected.equivalencia1Med));        
-        this.equivalenciaForm.controls['tipoEquiv2'].setValue(String(this.productDataSelected.equivalencia2Med));      
+        this.equivalenciaForm.controls['equivalencia2'].setValue(this.productDataSelected.equivalencia2); 
+        if(this.productDataSelected.equivalencia1Med){
+            this.equivalenciaForm.controls['tipoEquiv1'].setValue(String(this.productDataSelected.equivalencia1Med));        
+        } else {
+            this.equivalenciaForm.controls['tipoEquiv1'].setValue(this.productDataSelected.equivalencia1Med);        
+        }
+
+        if(this.productDataSelected.equivalencia2Med){
+            this.equivalenciaForm.controls['tipoEquiv2'].setValue(String(this.productDataSelected.equivalencia2Med));        
+        } else {
+            this.equivalenciaForm.controls['tipoEquiv2'].setValue(this.productDataSelected.equivalencia2Med);        
+        }                
         this.equivalenciaForm.controls['precio_general'].setValue(this.productDataSelected.precio_semanal);
         this.equivalenciaForm.get('porcentaje').setValue(null);
+        this.equivalenciaForm.get('manual').setValue(null);
         this.radioValue = 'a';
         this.isVisibleEquiv = true;
+        this.submittedEquivalencia = false;
     }
 
     handleCancelEquiv(): void {
         this.aplicar = false;
         this.submittedEquivalencia = false;
         this.isVisibleEquiv = false;
+
         this.radioValue = 'a';      
         this.equivalenciaForm.get('tipo').setValue(null);  
+        this.equivalenciaForm.get('porcentaje').setValue(null);
+        this.equivalenciaForm.get('manual').setValue(null);  
     }
 
     showModalGeneral(data: string): void {
@@ -195,12 +210,14 @@ export class ProductsComponent implements OnInit {
         this.productAgregarForm.get('existencia').setValue(null);  
         this.productAgregarForm.get('existencia_max').setValue(null);  
         this.productAgregarForm.get('existencia_min').setValue(null);  
-        this.productAgregarForm.get('medicion').setValue(null);  
+        this.productAgregarForm.get('id_medicion').setValue(null);  
         this.productAgregarForm.get('id_categoria').setValue(null); 
     }
 
     handleCancelAgregarProducto(): void {
         this.isVisibleAgregarProductos = false;  
+        this.submittedAgregarProducto =  false;
+
     }
 
     get f() { return this.productForm.controls; }
@@ -209,6 +226,7 @@ export class ProductsComponent implements OnInit {
 
     reset(): void{
         this.products = this.productsBackup;
+        this.searchValue = '';
     }
 
     search(): void {
@@ -247,6 +265,7 @@ export class ProductsComponent implements OnInit {
         if (this.productForm.invalid) {
             return;
         }
+
         this.isConfirmLoadingGeneral = true;
 
         let product = new Product(
@@ -275,9 +294,7 @@ export class ProductsComponent implements OnInit {
     onSubmitEquivalencia() {        
         this.submittedEquivalencia = true;
 
-        if (this.equivalenciaForm.get('equivalencia1').invalid && this.equivalenciaForm.get('equivalencia2').invalid && 
-        this.equivalenciaForm.get('tipoEquiv1').invalid && this.equivalenciaForm.get('tipoEquiv2').invalid && 
-        this.equivalenciaForm.get('precio_general').invalid) {            
+        if (this.equivalenciaForm.get('precio_general').invalid) {            
             return;
         }
 
@@ -307,14 +324,12 @@ export class ProductsComponent implements OnInit {
             this.isVisibleEquiv = false;
             this.isConfirmLoadingEquiv= false;
             this.toastr.success('Precio actualizado!');
-            
-            
+                  
         }, error => {
             this.isConfirmLoadingEquiv= false;
-            this.toastr.error('Hubo un error al actualizar la equivalencia');       
+            this.toastr.error('Hubo un error al actualizar el precio');       
         })
     }
-
 
     onSubmitAgregarProducto(){
         this.submittedAgregarProducto =  true;
@@ -339,7 +354,7 @@ export class ProductsComponent implements OnInit {
         .subscribe(result => {
             console.log(result);                       
             this.isConfirmLoadingAgregarProductos = false;
-            this.isVisibleAgregarProductos = false;
+            this.handleCancelAgregarProducto();
             this.toastr.success('Producto Agregado!');  
 
         }, err => {
@@ -371,8 +386,7 @@ export class ProductsComponent implements OnInit {
               });
           },
           nzCancelText: 'No',
-          nzOnCancel: () => {
-              
+          nzOnCancel: () => {             
           }
         });
     }
@@ -425,11 +439,10 @@ export class ProductsComponent implements OnInit {
                 precio_general = resultado - (opcionVal * (resultado/100));
             }
             
-            this.equivalenciaForm.controls['precio_general'].setValue(formatNumber(precio_general, 'en'));
+            this.equivalenciaForm.controls['precio_general'].setValue(Number(precio_general).toFixed(2));
         } catch (error) {
             console.log(error);
         }
-        
     }
 
     RestaurarPrecioGeneral(){

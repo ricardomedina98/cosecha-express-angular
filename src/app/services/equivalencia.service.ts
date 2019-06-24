@@ -15,18 +15,27 @@ export class EquivalenciaService {
 
   updateEquivalencia(equivalencia: Equivalencia){
     let data = {
-      precio_semanal: equivalencia.precio_semanal,
-      equivalencia1: equivalencia.equivalencia1,
-      medicionEquiv1: equivalencia.medicionEquiv1,
-      equivalencia2: equivalencia.equivalencia2,
-      medicionEquiv2: equivalencia.medicionEquiv2,
-      id_producto: equivalencia.id_producto,
-      porcentaje: equivalencia.porcentaje
+      precio_semanal: Number(equivalencia.precio_semanal),
+      equivalencia1: Number(equivalencia.equivalencia1),
+      medicionEquiv1: Number(equivalencia.medicionEquiv1),
+      equivalencia2: Number(equivalencia.equivalencia2),
+      medicionEquiv2: Number(equivalencia.medicionEquiv2),
+      id_producto: Number(equivalencia.id_producto),
+      porcentaje: Number(equivalencia.porcentaje)
     }
 
-    if(data.porcentaje === "" || data.porcentaje === "null"){
+    if(data.porcentaje == 0){
       data.porcentaje = null;
     }
+
+    if(data.equivalencia1 == 0)
+      data.equivalencia1 = null;
+    if(data.equivalencia2 == 0 )
+      data.equivalencia2 = null;
+    if(data.medicionEquiv1 == 0)
+      data.medicionEquiv1 = null;
+    if(data.medicionEquiv2 == 0)
+      data.medicionEquiv2 = null;
 
     return this.http.put<any>(`${environment.url_api}productos/equivalencias/${equivalencia.id_producto}`, data)
     .pipe(
@@ -34,5 +43,5 @@ export class EquivalenciaService {
             return result;
         })
     );
-}
+  }
 }

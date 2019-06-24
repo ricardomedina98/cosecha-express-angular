@@ -4,6 +4,12 @@
     border-color: #e9c13e;
 }
 
+.btn-excel{
+  color: #fff;
+  background-color: #2E8458; 
+  border-color: #2E8458;
+}
+
 .btn-enviar{
   color: #fff;
   background-color: #2EC458; 

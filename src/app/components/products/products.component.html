@@ -21,35 +21,31 @@
                         </div>
                     </nz-dropdown>
                 </th>
-                <th>Existencia</th>
                 <th>Precio General</th>
-                <th>Existencia Minima</th>
-                <th>Existencia Maxima</th>
+                <th>Unidad</th> 
+                <th>Existencia</th>                   
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let data of tableProductos.data">
-                <td>{{ data.nombre_producto }}</td>
-                <td>{{ data.existencia }} {{ data.medicion }}</td>
-
-                <ng-container *ngIf="!data.precio_semanal; then thenTemplate; else elseTemplate"></ng-container>
-                <ng-template #thenTemplate>
+                <td>{{ data.nombre_producto }}</td>       
+                <ng-container *ngIf="!data.precio_semanal; then sinAsignar; else precioSemanal"></ng-container>
+                <ng-template #sinAsignar>
                     <td>
                         <div class="text-danger">Sin asignar</div>
                     </td>
                 </ng-template>
-                <ng-template #elseTemplate>
+                <ng-template #precioSemanal>
                     <td>${{data.precio_semanal | number}}</td>
                 </ng-template>
-
-                <td>{{ data.existencia_min }} {{ data.medicion }}</td>
-                <td>{{ data.existencia_max }} {{ data.medicion }}</td>
+                <td>{{ data.tipo_medicion }}</td>
+                <td>{{ data.existencia }}</td>  
                 <td style="text-align: center">
-                    <button style="margin-right: 10px" nzTitle="Calcular" nzPlacement="topLeft" nz-tooltip class="btn btn-orange" (click)="showModalEquiv(data)"><i class="fa fa-calculator" aria-hidden="true"></i></button>
-                    <button style="margin-right: 10px" nzTitle="Editar" nzPlacement="topLeft" nz-tooltip class="btn btn-success" (click)="showModalGeneral(data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                    <button style="margin-right: 10px" nzTitle="Eliminar" nzPlacement="topLeft" nz-tooltip class="btn btn-danger" (click)="showDeleteConfirm(data)"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                    <button class="btn btn-grafica" nzTitle="En desarrrollo" nzPlacement="topLeft" nz-tooltip><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
+                    <button style="margin-right: 10px" nzTitle="Calcular" nzPlacement="topCenter" nz-tooltip class="btn btn-orange" (click)="showModalEquiv(data)"><i class="fa fa-calculator" aria-hidden="true"></i></button>
+                    <button style="margin-right: 10px" nzTitle="Editar" nzPlacement="topCenter" nz-tooltip class="btn btn-success" (click)="showModalGeneral(data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                    <button style="margin-right: 10px" nzTitle="Eliminar" nzPlacement="topCenter" nz-tooltip class="btn btn-danger" (click)="showDeleteConfirm(data)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                    <button class="btn btn-grafica" nzTitle="En desarrrollo" nzPlacement="topCenter" nz-tooltip><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
                 </td>
             </tr>
         </tbody>
@@ -64,7 +60,7 @@
 
 <nz-modal [(nzVisible)]="isVisibleEquiv" [nzWidth]="600" [nzTitle]="modalTitleEquiv" [nzContent]="modalContentEquiv"
     [nzFooter]="modalFooterEquiv" (nzOnCancel)="handleCancelEquiv()">
-    <ng-template #modalTitleEquiv>Equivalencias</ng-template>
+    <ng-template #modalTitleEquiv>Precio del producto: {{ productDataSelected.nombre_producto }}</ng-template>
 
     <ng-template #modalContentEquiv>
         <form [formGroup]="equivalenciaForm">
@@ -73,9 +69,7 @@
                     <div class="col-md-6">
                         <label for="">Valor 1</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" formControlName="equivalencia1" maxlength="7"
-                                (onchange)="numericOnly($event)"
-                                [ngClass]="{ 'is-invalid': submittedEquivalencia && fe.equivalencia1.errors }">
+                            <input type="text" class="form-control" formControlName="equivalencia1" maxlength="7" [ngClass]="{ 'is-invalid': submittedEquivalencia && fe.equivalencia1.errors }">
                             <span class="input-group-btn">
                                 <nz-select style="width: 115px;" formControlName="tipoEquiv1" nzShowSearch nzAllowClear
                                     nzPlaceHolder="Selecionar...">
@@ -84,11 +78,9 @@
                                 </nz-select>
                             </span>
                         </div>
-                        <div *ngIf="fe.equivalencia1.errors">
-                            <div *ngIf="fe.equivalencia1.errors.pattern" class="text-danger">Valor invalido</div>           
-                        </div>
-                       <div *ngIf="submittedEquivalencia && fe.equivalencia1.errors" class="invalid-feedback d-block">
-                            <div *ngIf="fe.equivalencia1.errors" class="text-danger">El valor 1 es requerido</div>
+                        <div *ngIf="aplicar && fe.equivalencia1.errors">
+                            <div *ngIf="fe.equivalencia1.errors.pattern" class="text-danger">Valor invalido</div>
+                            <div *ngIf="fe.equivalencia1.errors.required" class="text-danger">Campo Requerido</div>                      
                         </div>
                     </div>
 
@@ -96,7 +88,6 @@
                         <label for="">Valor 2</label>
                         <div class="input-group">
                             <input type="text" class="form-control" formControlName="equivalencia2" maxlength="7"
-                                (onchange)="numericOnly($event)"
                                 [ngClass]="{ 'is-invalid': submittedEquivalencia && fe.equivalencia2.errors }">
                             <span class="input-group-btn">
                                 <nz-select style="width: 115px;" formControlName="tipoEquiv2" nzShowSearch nzAllowClear
@@ -106,12 +97,10 @@
                                 </nz-select>
                             </span>
                         </div>
-                        <div *ngIf="fe.equivalencia2.errors">
-                                <div *ngIf="fe.equivalencia2.errors.pattern" class="text-danger">Valor invalido</div>           
-                            </div>
-                           <div *ngIf="submittedEquivalencia && fe.equivalencia2.errors" class="invalid-feedback d-block">
-                                <div *ngIf="fe.equivalencia2.errors.required" class="text-danger">El valor 2 es requerido</div>
-                            </div>
+                        <div *ngIf="aplicar && fe.equivalencia2.errors">
+                            <div *ngIf="fe.equivalencia2.errors.pattern" class="text-danger">Valor invalido</div>           
+                            <div *ngIf="fe.equivalencia2.errors.required" class="text-danger">Campo Requerido</div>           
+                        </div>
                     </div>
 
                 </div>
@@ -170,6 +159,7 @@
                 </div>
             </div>
 
+
             <div class="row" style="margin-top: 10px">
                 <div class="col-md-10">
                     <div class="form-group">
@@ -178,6 +168,9 @@
                             <input type="text" class="form-control" formControlName="precio_general" maxlength="7" style="width: 247%;">                    
                         </div>  
                         <span class="label" style="color: #292929; font-style: italic;">Porcentaje asignado: </span>     
+                        <div *ngIf="submittedEquivalencia && fe.precio_general.errors" class="invalid-feedback d-block">
+                            <div *ngIf="fe.precio_general.errors.required" class="text-danger">Campo requerido</div>
+                        </div>
                     </div>
                 </div>
 
@@ -274,8 +267,7 @@
                             </span>
                         </div>
                         <div *ngIf="submittedGeneral && f.id_medicion.errors" class="invalid-feedback d-block">
-                            <div *ngIf="f.id_medicion.errors.required" class="text-danger">El tipo de medicion es
-                                requerida</div>
+                            <div *ngIf="f.id_medicion.errors.required" class="text-danger">El tipo de medicion es requerida</div>
                         </div>
                     </div>
 

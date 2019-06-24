@@ -22,6 +22,7 @@ import { environment } from '../environments/environment';
 import { NZ_I18N, es_ES } from 'ng-zorro-antd';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
+import { UsersComponent } from './components/users/users.component';
 registerLocaleData(en);
 
 
@@ -29,7 +30,8 @@ const config: SocketIoConfig = { url: environment.url_api, options: {} };
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,

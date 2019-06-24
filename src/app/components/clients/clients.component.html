@@ -8,24 +8,19 @@
         </div>
     </mk-box>
 
-
     <div style="background: white">
         <nz-table #tableClientes [nzData]="clients" nzBordered="true" [nzLoading]="isLoading" nzSize="small" nzShowPagination="true">
             <thead>
                 <tr>      
                     <th nzCustomFilter> Nombre
-                        <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter
-                            #dropdown>
-                            <i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
+                        <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown><i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
                             <div class="search-box">
-                                <input type="text" nz-input placeholder="Buscar producto" [(ngModel)]="searchValueListaCliente" />
+                                <input type="text" nz-input placeholder="Buscar cliente" [(ngModel)]="searchValueListaCliente" />
                                 <button nz-button nzSize="small" nzType="primary" (click)="searchListaCliente()" class="search-button">Buscar </button>
                                 <button nz-button nzSize="small" (click)="resetListaCliente()">Reiniciar</button>
                             </div>
                         </nz-dropdown>
                     </th>
-                    <th>Apellido Paterno</th>
-                    <th>Apellido Materno</th>
                     <th>Empresa</th>
                     <th>Correo</th>
                     <th>Telefono</th>
@@ -35,15 +30,13 @@
             <tbody>
                 <tr *ngFor="let data of tableClientes.data">
                     <td >{{ data.nombre_cliente }}</td>
-                    <td >{{ data.apellido1_cliente }}</td>
-                    <td >{{ data.apellido2_cliente }}</td>
                     <td >{{ data.nombre_empresa_cliente }}</td>
                     <td >{{ data.correo_cliente }}</td>
                     <td >{{ data.telefono_cliente }}</td>
                     <td style="text-align: center">
-                        <button style="margin-right: 10px" nzTitle="Lista de productos" nzPlacement="topLeft" nz-tooltip class="btn btn-success" (click)="showModalListaCliente(data)"><i class="fa fa-list-ul" aria-hidden="true"></i></button>                    
-                        <button style="margin-right: 10px" nzTitle="Editar" nzPlacement="topLeft" nz-tooltip class="btn btn-success" (click)="showModalCliente(data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>                    
-                        <button class="btn btn-danger" nzTitle="Eliminar" nzPlacement="topLeft" nz-tooltip (click)="showDeleteConfirm(data)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                        <button style="margin-right: 10px" nzTitle="Lista de productos" nzPlacement="topCenter" nz-tooltip class="btn btn-success" (click)="showModalListaCliente(data)"><i class="fa fa-list-ul" aria-hidden="true"></i></button>                    
+                        <button style="margin-right: 10px" nzTitle="Editar" nzPlacement="topCenter" nz-tooltip class="btn btn-success" (click)="showModalCliente(data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>                    
+                        <button class="btn btn-danger" nzTitle="Eliminar" nzPlacement="topCenter" nz-tooltip (click)="showDeleteConfirm(data)"><i class="fa fa-trash" aria-hidden="true"></i></button>
                     </td>
                 </tr>
             </tbody>
@@ -65,23 +58,14 @@
                     <div class="col-md-4">
                         <label for="">Nombre</label>
                         <input type="text" class="form-control" formControlName="nombre_cliente">
-                            <div *ngIf="submittedCliente && fec.nombre_cliente.errors" class="invalid-feedback d-block">
-                                <div *ngIf="fec.nombre_cliente.errors.required" class="text-danger">El nombre es requerido</div>                  
-                            </div> 
                     </div>
                     <div class="col-md-4">
                         <label for="">Apellido Paterno</label>
-                        <input type="text" class="form-control" formControlName="apellido1_cliente"> 
-                            <div *ngIf="submittedCliente && fec.apellido1_cliente.errors" class="invalid-feedback d-block">
-                                <div *ngIf="fec.apellido1_cliente.errors.required" class="text-danger">El apellido es requerido</div>                  
-                            </div>               
+                        <input type="text" class="form-control" formControlName="apellido1_cliente">              
                     </div>
                     <div class="col-md-4">
                         <label for="">Apellido Materno</label>
                         <input type="text" class="form-control" formControlName="apellido2_cliente"> 
-                            <div *ngIf="submittedCliente && fec.apellido2_cliente.errors" class="invalid-feedback d-block">
-                                <div *ngIf="fec.apellido2_cliente.errors.required" class="text-danger">El apellido es requerido</div>                  
-                            </div>                
                     </div>
                 </div>
             </div>
@@ -106,10 +90,10 @@
 
                     <div class="col-md-4">
                         <label for="">Telefono</label>
-                        <input type="text" class="form-control" formControlName="telefono_cliente" maxlength="13">
-                            <div *ngIf="submittedCliente && fec.telefono_cliente.errors" class="invalid-feedback d-block">
-                                <div *ngIf="fec.telefono_cliente.errors.required" class="text-danger">El telefono es requerido</div>                  
-                            </div>              
+                        <input type="text" class="form-control" formControlName="telefono_cliente" maxlength="12">
+                            <div *ngIf="fec.telefono_cliente.errors">
+                                <div *ngIf="fec.telefono_cliente.errors.pattern" class="text-danger">Valor invalido</div>           
+                            </div>         
                     </div>           
                 </div>
             </div>
@@ -138,24 +122,15 @@
                 <div class="form-group">
                     <div class="col-md-4">
                         <label for="">Nombre</label>
-                        <input type="text" class="form-control" formControlName="nombre_cliente">
-                            <div *ngIf="submittedAgregarCliente && fc.nombre_cliente.errors" class="invalid-feedback d-block">
-                                <div *ngIf="fc.nombre_cliente.errors.required" class="text-danger">El nombre es requerido</div>                  
-                            </div>   
+                            <input type="text" class="form-control" formControlName="nombre_cliente">  
                     </div>
                     <div class="col-md-4">
                         <label for="">Apellido Paterno</label>
-                        <input type="text" class="form-control" formControlName="apellido1_cliente">   
-                            <div *ngIf="submittedAgregarCliente && fc.apellido1_cliente.errors" class="invalid-feedback d-block">
-                                <div *ngIf="fc.apellido1_cliente.errors.required" class="text-danger">El apellido es requerido</div>                  
-                            </div>               
+                            <input type="text" class="form-control" formControlName="apellido1_cliente">               
                     </div>
                     <div class="col-md-4">
                         <label for="">Apellido Materno</label>
-                        <input type="text" class="form-control" formControlName="apellido2_cliente">   
-                            <div *ngIf="submittedAgregarCliente && fc.apellido2_cliente.errors" class="invalid-feedback d-block">
-                                <div *ngIf="fc.apellido2_cliente.errors.required" class="text-danger">El apellido es requerido</div>                  
-                            </div>            
+                            <input type="text" class="form-control" formControlName="apellido2_cliente">           
                     </div>
                 </div>
             </div>
@@ -179,10 +154,10 @@
                     </div>  
                     <div class="col-md-4">
                         <label for="">Telefono</label>
-                        <input type="text" class="form-control" formControlName="telefono_cliente">   
-                            <div *ngIf="submittedAgregarCliente && fc.telefono_cliente.errors" class="invalid-feedback d-block">
-                                <div *ngIf="fc.telefono_cliente.errors.required" class="text-danger">El telefono es requerido</div>                  
-                            </div>               
+                        <input type="text" class="form-control" formControlName="telefono_cliente" maxlength="12">   
+                            <div *ngIf="fc.telefono_cliente.errors">
+                                <div *ngIf="fc.telefono_cliente.errors.pattern" class="text-danger">Valor invalido</div>           
+                            </div>             
                     </div>       
                 </div>
             </div>
@@ -204,7 +179,7 @@
 
 
 <nz-modal [(nzVisible)]="isVisibleListaCliente" [nzWidth]="800" [nzTitle]="modalTitleListaCliente" [nzContent]="modalContentListaCliente" [nzFooter]="modalFooterListaCliente" (nzOnCancel)="handleCancelListaCliente()">
-  <ng-template #modalTitleListaCliente>Lista de productos del cliente</ng-template>
+  <ng-template #modalTitleListaCliente>Lista de productos de {{ clientDataSelected.nombre_empresa_cliente }}</ng-template>
 
   <ng-template #modalContentListaCliente>
 
@@ -217,13 +192,13 @@
                   <div class="col-sm-3">
                         <label for="">Tipo</label>
                             <div class="input-group">
-                                <nz-select style="width: 120px;" formControlName="tipo" nzShowSearch nzAllowClear nzPlaceHolder="Selecionar...">
+                                <nz-select style="width: 120px;" formControlName="tipoEquiv" nzShowSearch nzAllowClear nzPlaceHolder="Selecionar...">
                                     <nz-option nzLabel="+" nzValue="+"></nz-option>
                                     <nz-option nzLabel="-" nzValue="-"></nz-option>
                                 </nz-select>
                             </div>
-                            <div *ngIf="aplicar && fe.tipo.errors" class="invalid-feedback d-block">
-                                <div *ngIf="fe.tipo.errors.required" class="text-danger">Campo requerido</div>
+                            <div *ngIf="submittedEquivalencias && fequi.tipoEquiv.errors" class="invalid-feedback d-block">
+                                <div *ngIf="fequi.tipoEquiv.errors.required" class="text-danger">Campo requerido</div>
                             </div>
                     </div>
                             
@@ -231,6 +206,12 @@
                         <label nz-radio nzValue="a" style="margin-bottom: 5px;">Manual</label>                                        
                             <div class="input-group" >
                                 <input formControlName="manual" nz-input placeholder="0.0"/>
+                            </div>
+                            <div *ngIf="fequi.manual.errors">
+                                <div *ngIf="fequi.manual.errors.pattern" class="text-danger">Valor invalido</div>           
+                            </div>
+                            <div *ngIf="submittedEquivalencias && fequi.manual.errors" class="invalid-feedback d-block">
+                                <div *ngIf="fequi.manual.errors.required" class="text-danger">Campo requerido</div>
                             </div>
                     </div>  
 
@@ -250,19 +231,23 @@
                                 <nz-option nzLabel="50%" nzValue="50"></nz-option>
                             </nz-select>
                         </div>
+                        <div *ngIf="submittedEquivalencias && fequi.porcentaje.errors" class="invalid-feedback d-block">
+                            <div *ngIf="fequi.porcentaje.errors.required" class="text-danger">Campo requerido</div>
+                        </div>
                     </div>  
 
                     <div class="col-sm-2">
                     <label for=""></label>
                         <div class="input-group">
-                            <button nz-button nzType="primary" style="margin-top: 5px" (click)="showConfirm()">Aplicar</button>
+                            <button nz-button nzType="primary" nzTitle="Aplicar porcentaje" nzPlacement="topLeft" nz-tooltip style="margin-top: 5px" (click)="showConfirm()">Aplicar</button>
+
                         </div>
                     </div>
 
                     <div class="col-sm-1">
                       <label for=""></label>
                           <div class="input-group" style="width: 10%">
-                              <button nz-button nzType="primary" style="margin-top: 5px"><i class="fa fa-undo" aria-hidden="true"></i></button>
+                              <button nz-button nzType="primary" nzTitle="Restaurar precios" nzPlacement="topLeft" nz-tooltip style="margin-top: 5px" (click)="showConfirmRestaurarLista()"><i class="fa fa-undo" aria-hidden="true"></i></button>
                           </div>
                     </div>
                 </nz-radio-group> 
@@ -278,26 +263,27 @@
 
 
  
-    <nz-table #tableProductosCliente [nzData]="productsClientsList" nzBordered="true" [nzLoading]="isLoadingClientProducts" nzSize="small" nzShowPagination="true">
+    <nz-table #tableProductosCliente [nzData]="productsClientsList" (nzCurrentPageDataChange)="currentPageDataChange($event)" nzBordered="true" [nzLoading]="isLoadingClientProducts" nzSize="small" nzShowPagination="true">
       <thead>
-        <tr>
-          <th nzCustomFilter> Nombre
-            <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown><i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i><div class="search-box">
-                <input type="text" nz-input placeholder="Buscar producto" (ngModel)="searchValueListaProductosCliente"/>
-                <button nz-button nzSize="small" nzType="primary" (click)="searchListaProductosCliente()" class="search-button">Buscar </button>
-                <button nz-button nzSize="small" (click)="resetListaProductosCliente()">Reiniciar</button>
-              </div>
-            </nz-dropdown>
-          </th>
-          <th>Existencia</th>
-          <th>Precio</th>
+        <tr>         
+            <th nzCustomFilter> Nombre
+                <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown><i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
+                    <div class="search-box">
+                        <input type="text" nz-input placeholder="Buscar producto" [(ngModel)]="searchValueListaProductosCliente" />
+                        <button nz-button nzSize="small" nzType="primary" (click)="searchListaProductosCliente()" class="search-button">Buscar </button>
+                        <button nz-button nzSize="small" (click)="resetListaProductosCliente()">Reiniciar</button>
+                    </div>
+                </nz-dropdown>
+            </th>
+          <th>Precio</th>          
+          <th>Unidad</th>
           <th>Acciones</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let data of tableProductosCliente.data">
+        <tr *ngFor="let data of tableProductosCliente.data">    
           <td>{{ data.nombre_producto }}</td>
-          <td>{{ data.existencia }} {{ data.medicion }}</td>
           <ng-container *ngIf="!data.precio_semanal; then thenTemplate; else elseTemplate"></ng-container>
           <ng-template #thenTemplate>
             <td>
@@ -306,26 +292,35 @@
           </ng-template>
           <ng-template #elseTemplate>
             <td>${{data.precio_semanal | number}}</td>
-          </ng-template>
+          </ng-template>          
+          <td>{{ data.tipo_medicion }}</td>
           <td style="text-align: center">
-            <button style="margin-right: 10px" class="btn btn-orange" (click)="showModalPrecioProducto(data)"><i class="fa fa-calculator" aria-hidden="true"></i></button>            
-            <button class="btn btn-danger" (click)="showDeleteConfirmProductClient(data)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+            <button style="margin-right: 10px" nzTitle="Calcular" nzPlacement="topCenter" nz-tooltip class="btn btn-orange" (click)="showModalPrecioProducto(data)"><i class="fa fa-calculator" aria-hidden="true"></i></button>            
+            <button style="margin-right: 10px" nzTitle="Eliminar" nzPlacement="topCenter" nz-tooltip class="btn btn-danger" (click)="showDeleteConfirmProductClient(data)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+            <button class="btn btn-primary" nzTitle="Restaurar precio" nzPlacement="topCenter" nz-tooltip (click)="showConfirmRestaurarPrecio(data)"><i class="fa fa-undo" aria-hidden="true"></i></button>        
           </td>
+          <td nzShowCheckbox [(nzChecked)]="mapOfCheckedIdMarkProduct[data.id_producto]" (nzCheckedChange)="refreshStatusMarkProduct()"></td>  
         </tr>
       </tbody>
     </nz-table>
   </ng-template>
   <ng-template #modalFooterListaCliente>
       <button nz-button nzType="primary" class="pull-left" (click)="showModalListaProducto()">Agregar productos</button>
-      <button nz-button nzType="primary" class="btn btn-enviar pull-left" (click)="enviarCorreo()"><i class="fa fa-paper-plane" aria-hidden="true"></i> Enviar</button>           
+      <button nz-button nzTitle="Enviar a {{ clientDataSelected.correo_cliente }}" nzPlacement="topLeft" nz-tooltip class="btn btn-enviar pull-left" (click)="showModalObservaciones()" [nzLoading]="isConfirmLoadingListaCliente"><i class="fa fa-paper-plane" aria-hidden="true"> </i> Enviar</button>           
+      <button nz-button nzTitle="Exportar a Excel" nzPlacement="topLeft" nz-tooltip class="btn btn-excel pull-left" (click)="exportarExcel()" [nzLoading]="isConfirmLoadingExcel"><i class="fa fa-list" aria-hidden="true"> </i> Excel</button>           
       <button nz-button nzType="default" (click)="handleCancelListaCliente()">Cerrar</button>
-      <button nz-button nzType="primary" (click)="onSubmitListaCliente()" [nzLoading]="isConfirmLoadingListaCliente">Guardar cambios</button>
+      <button nz-button nzType="primary" (click)="onSubmitListaCliente()">OK</button>
   </ng-template>
 </nz-modal>
 
 
+
+
+
 <!--                                             Lista Producto                                                                   -->
  
+
+
 
 
 <nz-modal [(nzVisible)]="isVisibleListaProducto" [nzWidth]="800" [nzTitle]="modalTitleListaProducto" [nzContent]="modalContentListaProducto" [nzFooter]="modalFooterListaProducto" (nzOnCancel)="handleCancelListaProducto()">
@@ -336,23 +331,37 @@
         <thead>
             <tr>
                 <th nzShowCheckbox nzShowRowSelection [nzSelections]="listOfSelection" [(nzChecked)]="isAllDisplayDataChecked" [nzIndeterminate]="isIndeterminate" (nzCheckedChange)="checkAll($event)"></th>
-                <th nzCustomFilter>Nombre
-                    <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown><i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
+                <th nzCustomFilter> Nombre
+                    <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter
+                        #dropdown>
+                        <i nz-icon nzType="search" class="ant-table-filter-icon" [class.ant-table-filter-open]="dropdown.nzVisible" nz-dropdown></i>
                         <div class="search-box">
-                            <input type="text" nz-input placeholder="Buscar producto" (ngModel)="searchValue"/>
-                            <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Buscar </button>
-                            <button nz-button nzSize="small" (click)="reset()">Reiniciar</button>
+                            <input type="text" nz-input placeholder="Buscar producto" [(ngModel)]="searchValueListaProductos" />
+                            <button nz-button nzSize="small" nzType="primary" (click)="searchListaProductos()" class="search-button">Buscar </button>
+                            <button nz-button nzSize="small" (click)="resetListaProductos()">Reiniciar</button>
                         </div>
                     </nz-dropdown>
                 </th>
                 <th>Precio</th>
+                <th>Unidad</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let data of tableProductos.data">
                 <td nzShowCheckbox [(nzChecked)]="mapOfCheckedId[data.id_producto]" (nzCheckedChange)="refreshStatus()"></td>
                 <td>{{ data.nombre_producto }}</td>
-                <td>${{ data.precio_semanal | number }}</td>         
+
+                <ng-container *ngIf="!data.precio_semanal; then sinAsignar; else precioSemanal"></ng-container>
+                <ng-template #sinAsignar>
+                    <td>
+                        <div class="text-danger">Sin asignar</div>
+                    </td>
+                </ng-template>
+                <ng-template #precioSemanal>
+                    <td>${{data.precio_semanal | number}}</td>
+                </ng-template>
+                
+                <td>{{ data.tipo_medicion }}</td>      
             </tr>
         </tbody>
       </nz-table>
@@ -398,6 +407,9 @@
                                     <div class="input-group" >
                                         <input formControlName="manual" nz-input placeholder="0.0"/>
                                     </div>
+                                    <div *ngIf="fe.manual.errors">
+                                        <div *ngIf="fe.manual.errors.pattern" class="text-danger">Valor invalido</div>           
+                                    </div>
                             </div>  
     
                             <div class="col-sm-3">
@@ -434,8 +446,12 @@
                             <label for="">Precio</label>  
                             <div class="input-group">   
                                 <input type="text" class="form-control" formControlName="precio_general" maxlength="7">                    
-                            </div>   
-                            <span class="label" style="color: #292929; font-style: italic;">Porcentaje asignado: </span>       
+                            </div> 
+                            <span class="label" style="color: #292929; font-style: italic;">Porcentaje asignado: </span>  
+                                <div *ngIf="aplicarClienteProducto && fe.precio_general.errors" class="invalid-feedback d-block">
+                                    <div *ngIf="fe.precio_general.errors.required" class="text-danger">Campo requerido</div>
+                                    <div *ngIf="fe.precio_general.errors.pattern" class="text-danger">Valor invalido</div>           
+                                </div>                          
                         </div>
                     </div>
 
@@ -445,7 +461,12 @@
                             <div class="input-group">   
                                 <input type="number" class="form-control" formControlName="precio_actualizado" maxlength="7">                    
                             </div> 
-                            
+                            <div *ngIf="fe.precio_actualizado.errors">
+                                <div *ngIf="fe.precio_actualizado.errors.pattern" class="text-danger">Valor invalido</div>           
+                            </div>   
+                            <div *ngIf="submittedPrecio && fe.precio_actualizado.errors" class="invalid-feedback d-block">
+                                <div *ngIf="fe.precio_actualizado.errors.required" class="text-danger">Campo requerido</div>
+                            </div>                           
                         </div>
                     </div>
     
@@ -453,17 +474,39 @@
                         <div class="form-group">
                             <label for=""></label>  
                             <div class="input-group" style="margin-top: 6px;">                        
-                                <button nz-button nzType="primary" (click)="RestaurarPrecioGeneral()"><i class="fa fa-undo" aria-hidden="true"></i></button>                                        
+                                <button nz-button nzType="primary" (click)="showConfirmRestaurarPrecioGeneral()"><i class="fa fa-undo" aria-hidden="true"></i></button>                                        
                             </div>                 
                         </div>
                     </div>            
-                </div>
-    
+                </div> 
             </form>
-
         </ng-template>
     <ng-template #modalFooterPrecioProducto>
         <button nz-button nzType="default" (click)="handleCancelPrecioProducto()">Cerrar</button>
         <button nz-button nzType="primary" (click)="onSubmitPrecioProducto()" [nzLoading]="isConfirmLoadingPrecioProducto">Actualizar</button>
+    </ng-template>
+  </nz-modal>
+
+
+
+
+
+
+  
+<nz-modal [(nzVisible)]="isVisibleObservaciones" [nzWidth]="610" [nzTitle]="modalTitleObservaciones" [nzContent]="modalContentObservaciones" [nzFooter]="modalFooterObservaciones" (nzOnCancel)="handleCancelObservaciones()">
+    <ng-template #modalTitleObservaciones>Empresa: {{ clientDataSelected.nombre_empresa_cliente }}</ng-template>
+    <ng-template #modalContentObservaciones>
+
+        <form [formGroup]="observacionesForm">
+            <div>
+                <label for="">Observaciones <b>(opcional)</b></label>
+                <textarea nz-input nzAutosize formControlName="observacion"></textarea>                                  
+            </div>   
+        </form>  
+        
+    </ng-template>
+    <ng-template #modalFooterObservaciones>
+        <button nz-button nzType="default" (click)="handleCancelObservaciones()">Cerrar</button>
+        <button nz-button nzType="primary" (click)="showConfirmEnviarCorreo()">Enviar</button>
     </ng-template>
   </nz-modal>

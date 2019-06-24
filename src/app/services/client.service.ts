@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { map, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 import { Observable } from 'rxjs';
@@ -118,7 +118,18 @@ export class ClientService {
                         item.existencia,
                         item.existencia_min,
                         item.existencia_max,
-                        this.arrayPosToJSOPrecioE(item.Productos_Clientes)
+                        this.arrayPosToJSOPrecioE(item.Productos_Clientes),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        this.arrayPosToJSOMedcion(item.Medicione)
                     );
                 })
             })
@@ -126,8 +137,6 @@ export class ClientService {
     }
 
     addProductsClient(listProducts: Product[], id_cliente: string) {
-
-
         let ListProducts = [];
         
         listProducts.forEach((item, index) => {
@@ -147,6 +156,84 @@ export class ClientService {
         );
     }
 
+    updatePrecioEspecial(id_cliente: string, id_producto: string, precio_especial: string){
+
+        let data = {
+            precio_especial
+        }
+        return this.http.put<any>(`${environment.url_api}clientes/${id_cliente}/productos/${id_producto}`, data)
+        .pipe(
+            map(result => {                
+                return result;
+            })
+        );
+    }
+
+    restaurarListaPrecios(id_cliente: string){
+
+        return this.http.get<any>(`${environment.url_api}clientes/restaurar_lista/${id_cliente}`)
+        .pipe(
+            map(result => {                
+                return result;
+            })
+        );
+    }
+
+    restaurarPrecio(id_cliente: string, id_producto: string){
+
+        return this.http.get<any>(`${environment.url_api}clientes/${id_cliente}/producto/${id_producto}`)
+        .pipe(
+            map(result => {                
+                return result;
+            })
+        );
+    }
+
+    aplicarDescuentoLista(id_cliente: string, porcentaje: number, operacion: string){
+
+        let data = {
+            porcentaje,
+            operacion
+        }        
+
+        return this.http.put<any>(`${environment.url_api}clientes/${id_cliente}/aplicar_operacion`, data)
+        .pipe(
+            map(result => {                
+                return result;
+            })
+        );
+    }
+
+    enviarCorreo(id_cliente: string, observacion: string, productosMarcados: any){
+
+        let data = {
+            observacion,
+            productosMarcados
+        }
+
+        return this.http.post<any>(`${environment.url_api}clientes/${id_cliente}/enviar_correo`, data)
+        .pipe(
+            map(result => {                
+                return result;
+            })
+        );
+    }
+
+    exportExcel(id_cliente: string) {     
+        return this.http.get(`${environment.url_api}clientes/${id_cliente}/descargar_excel`, {responseType: 'blob'})
+        .pipe(
+        tap( // Log the result or error
+            data => {
+                return data;
+            },
+            error => {
+                console.log("TCL: ClientService -> exportExcel -> error", error)    
+            }
+        ));
+            
+    }
+    
+
     arrayPosToJSOID(value: any) {    
         
         try {
@@ -159,7 +246,29 @@ export class ClientService {
     arrayPosToJSOPrecioE(value: any) {    
         
         try {
-            return value.precio_especial;
+            return this.convertTwoDecimal(value.precio_especial);
+        } catch (error) {
+            return null;
+        }  
+    }
+
+    arrayPosToJSOMedcion(value: any) {    
+        
+        try {
+            return value.tipo_medicion;
+        } catch (error) {
+            return null;
+        }  
+    }
+
+    convertTwoDecimal(value: any) {
+        try {
+            if(value != null) {
+                return Number(value).toFixed(2);
+            } else {
+                return null;
+            }
+            
         } catch (error) {
             return null;
         }  

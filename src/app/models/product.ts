@@ -18,6 +18,6 @@ export class Product {
         public equivalencia2?: string,
         public equivalencia1Med?: string,
         public equivalencia2Med?: string,
-               
+        public tipo_medicion?: string,
     ){}
 }

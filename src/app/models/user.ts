@@ -5,6 +5,11 @@ export class User{
         public nombre_usuario: string,
         public contrasena: string,
         public role: string,
-        public token?: string
+        public token?: string,
+        public status?: string,
+        public fecha_creacion?: string,
+        public creado_por?: string,
+        public fecha_ultima_modificacion?: string,
+        public fecha_modificacion_por?: string,
     ){}
 }

@@ -40,6 +40,13 @@ const routes: Routes = [
         data: {
           title: 'Clientes'
         }
+      },
+      {
+        path:'usuarios',
+        loadChildren: '../components/users/users.module#UsersModule',
+        data: {
+          title: 'Usuarios'
+        }
       }
     ]
   }

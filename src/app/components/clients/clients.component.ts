@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import * as __ from 'lodash';
 import { saveAs } from 'file-saver';
 
-import { NzModalService, NzPopconfirmModule, NzInputModule   } from 'ng-zorro-antd';
+import { NzModalService, NzPopconfirmModule, NzInputModule  } from 'ng-zorro-antd';
 
 import { Cliente } from '../../models/clientes';
 import { ClientService } from '../../services/client.service';

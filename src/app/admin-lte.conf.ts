@@ -15,5 +15,6 @@ export const adminLteConf = {
       {label: ' Clientes', route: '/clientes', iconClasses: 'fa fa-address-card', pullRights: [{classes: 'label pull-right bg-green'}]},  
       {label: ' Proveedores', route: '/proveedores', iconClasses: 'fa fa-users', pullRights: [{classes: 'label pull-right bg-green'}]},
       {label: ' Productos', route: '/productos', iconClasses: 'fa fa-product-hunt', pullRights: [{classes: 'label pull-right bg-green'}]},
+      {label: ' Usuarios', route: '/usuarios', iconClasses: 'fa fa-user-o', pullRights: [{classes: 'label pull-right bg-green'}]}
     ]
   };

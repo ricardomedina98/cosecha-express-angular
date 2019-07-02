@@ -45,7 +45,7 @@
                     <button style="margin-right: 10px" nzTitle="Calcular" nzPlacement="topCenter" nz-tooltip class="btn btn-orange" (click)="showModalEquiv(data)"><i class="fa fa-calculator" aria-hidden="true"></i></button>
                     <button style="margin-right: 10px" nzTitle="Editar" nzPlacement="topCenter" nz-tooltip class="btn btn-success" (click)="showModalGeneral(data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                     <button style="margin-right: 10px" nzTitle="Eliminar" nzPlacement="topCenter" nz-tooltip class="btn btn-danger" (click)="showDeleteConfirm(data)"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                    <button class="btn btn-grafica" nzTitle="En desarrrollo" nzPlacement="topCenter" nz-tooltip><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
+                    <button class="btn btn-grafica" nzTitle="Estadistica" nzPlacement="topCenter" nz-tooltip (click)="showModalGraficaProducto(data)"><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
                 </td>
             </tr>
         </tbody>
@@ -144,6 +144,8 @@
                                     <nz-option nzLabel="40%" nzValue="40"></nz-option>
                                     <nz-option nzLabel="45%" nzValue="45"></nz-option>
                                     <nz-option nzLabel="50%" nzValue="50"></nz-option>
+                                    <nz-option nzLabel="100%" nzValue="100"></nz-option>
+                                    <nz-option nzLabel="200%" nzValue="200"></nz-option>
                                 </nz-select>
                             </div>
                         </div>  
@@ -167,7 +169,7 @@
                         <div class="input-group">   
                             <input type="text" class="form-control" formControlName="precio_general" maxlength="7" style="width: 247%;">                    
                         </div>  
-                        <span class="label" style="color: #292929; font-style: italic;">Porcentaje asignado: </span>     
+                        <span class="label" style="color: #757474; font-style: italic;">Ultima modificacion: <span style="color: #292929;">{{ productDataSelected.fecha_ultima_modificacion }}</span></span>
                         <div *ngIf="submittedEquivalencia && fe.precio_general.errors" class="invalid-feedback d-block">
                             <div *ngIf="fe.precio_general.errors.required" class="text-danger">Campo requerido</div>
                         </div>
@@ -412,7 +414,28 @@
 
     <ng-template #modalFooterAgregarProducto>
         <button nz-button nzType="default" (click)="handleCancelAgregarProducto()">Cerrar</button>
-        <button nz-button (click)="onSubmitAgregarProducto()" nzType="primary"
-            [nzLoading]="isConfirmLoadingAgregarProductos">Agregar</button>
+        <button nz-button (click)="onSubmitAgregarProducto()" nzType="primary" [nzLoading]="isConfirmLoadingAgregarProductos">Agregar</button>
+    </ng-template>
+</nz-modal>
+
+
+<!--                                  Modal Gradicas producto                                 -->
+
+
+<nz-modal [(nzVisible)]="isVisibleGraficaProducto" [nzWidth]="1000" [nzTitle]="modalTitleGraficaProducto" [nzContent]="modalContentGraficaProducto" [nzFooter]="modalFooterGraficaProducto" (nzOnCancel)="handleCancelGraficaProducto()">
+    <ng-template #modalTitleGraficaProducto>Producto: {{ productDataSelected.nombre_producto }}</ng-template>
+    <ng-template #modalContentGraficaProducto>
+        
+    <fusioncharts
+        [type]="type"
+        [width]="width"
+        [height]="height"
+        [dataSource]="dataSource">
+    </fusioncharts>
+      
+
+    </ng-template>
+    <ng-template #modalFooterGraficaProducto>
+        <button nz-button nzType="default" (click)="handleCancelGraficaProducto()">Cerrar</button>
     </ng-template>
 </nz-modal>

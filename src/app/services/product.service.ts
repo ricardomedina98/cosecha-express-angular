@@ -3,11 +3,14 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
-
 import { Product } from '../models/product';
 import { Observable } from 'rxjs';
 
 import { Socket } from 'ngx-socket-io';
+import * as moment from 'moment';
+
+
+moment.locale('en');
 
 @Injectable({
     providedIn: 'root'
@@ -35,7 +38,7 @@ export class ProductService {
                         item.status,
                         item.fecha_creacion,
                         item.creado_por,
-                        item.fecha_ultima_modificacion,
+                        this.formatDate(item.fecha_ultima_modificacion),
                         item.fecha_modificacion_por,
                         item.Equivalencia.id_equivalencia,
                         item.Equivalencia.equivalencia1,
@@ -47,7 +50,6 @@ export class ProductService {
                 })
             })
         );
-        
     }
 
     getProducts(): Observable<Product[]> {
@@ -66,7 +68,7 @@ export class ProductService {
                         item.status,
                         item.fecha_creacion,
                         item.creado_por,
-                        item.fecha_ultima_modificacion,
+                        this.formatDate(item.fecha_ultima_modificacion),
                         item.fecha_modificacion_por,
                         item.Equivalencia.id_equivalencia,
                         item.Equivalencia.equivalencia1,
@@ -134,6 +136,16 @@ export class ProductService {
         );
     }
 
+    chartProduct(id_producto: string) {
+        
+        return this.http.get<any>(`${environment.url_api}productos/${id_producto}/grafica`)
+        .pipe(
+            map(data => {  
+                return data;
+            })
+        );
+    }
+
     arrayPosToJSOID(value: any) {    
         
         try {
@@ -152,6 +164,20 @@ export class ProductService {
         }  
     }
 
+    formatDate(value: any){
+        moment.locale('es');
+
+        try {
+            if(value != null) {
+                return moment(value).format('dddd DD, MMM YYYY');
+            } else {
+                return null;
+            }
+        } catch (error) {
+            return null;
+        }  
+    }
+
     convertTwoDecimal(value: any) {
         try {
             if(value != null) {
@@ -159,11 +185,9 @@ export class ProductService {
             } else {
                 return null;
             }
-            
         } catch (error) {
             return null;
         }  
     }
 
-    
 }

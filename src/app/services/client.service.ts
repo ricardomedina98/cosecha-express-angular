@@ -12,6 +12,8 @@ import { Product } from '../models/product';
 import { Socket } from 'ngx-socket-io';
 import { reject } from 'q';
 
+import * as moment from 'moment';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -122,8 +124,8 @@ export class ClientService {
                         null,
                         null,
                         null,
-                        null,
-                        null,
+                        this.formatDate(item.fecha_ultima_modificacion),
+                        null, 
                         null,
                         null,
                         null,
@@ -230,10 +232,8 @@ export class ClientService {
                 console.log("TCL: ClientService -> exportExcel -> error", error)    
             }
         ));
-            
     }
     
-
     arrayPosToJSOID(value: any) {    
         
         try {
@@ -247,6 +247,20 @@ export class ClientService {
         
         try {
             return this.convertTwoDecimal(value.precio_especial);
+        } catch (error) {
+            return null;
+        }  
+    }
+
+    formatDate(value: any){
+        moment.locale('es');
+
+        try {
+            if(value != null) {
+                return moment(value).format('dddd DD, MMM YYYY');
+            } else {
+                return null;
+            }
         } catch (error) {
             return null;
         }  

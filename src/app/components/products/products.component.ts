@@ -3,12 +3,18 @@ import { formatNumber } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 
+/*Desinstalar */
+import * as shape from 'd3-shape';
+
 
 import { MedicionService } from '../../services/medicion.service';
 import { ProductService } from '../../services/product.service';
 import { CategoriaService } from '../../services/categoria.service';
 import { EquivalenciaService } from '../../services/equivalencia.service';
-import { NzModalService, NzToolTipModule } from 'ng-zorro-antd';
+import { NzModalService } from 'ng-zorro-antd';
+
+
+import * as FusionCharts from 'fusioncharts';
 
 
 import { Product } from '../../models/product';
@@ -22,6 +28,16 @@ import { Equivalencia } from '../../models/equivalencia';
     styleUrls: ['./products.component.css']
 })
 export class ProductsComponent implements OnInit {
+
+//#region Variables fucioncharts
+
+    dataSource: any;
+    type: string;
+    width: string;
+    height: string;
+
+//#endregion
+    
     isLoading: boolean = true;
    
     public products: Product[] = [];
@@ -56,6 +72,9 @@ export class ProductsComponent implements OnInit {
 
     isVisibleAgregarProductos = false;
     isConfirmLoadingAgregarProductos = false;
+
+    isVisibleGraficaProducto = false;
+  
     
     listOfProducts: string[] = [];
 
@@ -67,8 +86,40 @@ export class ProductsComponent implements OnInit {
         private categoriaService: CategoriaService,
         private equivalenciaService: EquivalenciaService,
         private formBuilder: FormBuilder,
-        private toastr: ToastrService
+        private toastr: ToastrService        
     ) {
+
+        this.type = 'timeseries';
+        this.width = '100%';
+        this.height = '400';
+        // This is the dataSource of the chart
+        this.dataSource = { 
+            chart: {
+                exportEnabled: "1", 
+                showlegend: 0                
+            },
+            plotConfig: {
+                generic: {
+                    connectNullData: true
+                }
+            },
+            caption: {
+                text: 'Estadistica del Producto'
+            },
+            subcaption: {
+                text: 'Producto'
+            },
+            yAxis: [{
+                plot: {
+                    value: "Precio del Producto",
+                },
+                title: "Producto",
+            }, {
+                format: {
+                    prefix: "$",
+                }
+            }]
+        };     
 
         this.productService.getAllProducts()
         .subscribe(request => {
@@ -162,6 +213,9 @@ export class ProductsComponent implements OnInit {
             this.equivalenciaForm.controls['tipoEquiv2'].setValue(this.productDataSelected.equivalencia2Med);        
         }                
         this.equivalenciaForm.controls['precio_general'].setValue(this.productDataSelected.precio_semanal);
+
+
+
         this.equivalenciaForm.get('porcentaje').setValue(null);
         this.equivalenciaForm.get('manual').setValue(null);
         this.radioValue = 'a';
@@ -217,7 +271,37 @@ export class ProductsComponent implements OnInit {
     handleCancelAgregarProducto(): void {
         this.isVisibleAgregarProductos = false;  
         this.submittedAgregarProducto =  false;
+    }
 
+    showModalGraficaProducto(data: string): void {
+        this.productDataSelected = JSON.parse(JSON.stringify(data));
+        this.productService.chartProduct(this.productDataSelected.id_producto)
+        .subscribe(data => {   
+            let schema = [{
+                "name": "Fecha",
+                "type": "date",
+                "format": "%d/%m/%Y-%H:%M"
+              },
+              {
+                "name": "Precio",
+                "type": "number"
+            }];
+    
+            const fusionDataStore = new FusionCharts.DataStore();            
+                        
+            const fusionTable = fusionDataStore.createDataTable(data, schema); 
+            this.dataSource.subcaption.text = this.productDataSelected.nombre_producto;
+            this.dataSource.data = fusionTable;
+                        
+        }, err=> {
+            console.log(err);            
+        });
+        this.isVisibleGraficaProducto = true;
+    }
+
+    handleCancelGraficaProducto(): void {
+        this.isVisibleGraficaProducto = false;
+        this.dataSource.data = null;  
     }
 
     get f() { return this.productForm.controls; }

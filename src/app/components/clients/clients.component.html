@@ -229,6 +229,8 @@
                                 <nz-option nzLabel="40%" nzValue="40"></nz-option>
                                 <nz-option nzLabel="45%" nzValue="45"></nz-option>
                                 <nz-option nzLabel="50%" nzValue="50"></nz-option>
+                                <nz-option nzLabel="100%" nzValue="100"></nz-option>
+                                <nz-option nzLabel="200%" nzValue="200"></nz-option>
                             </nz-select>
                         </div>
                         <div *ngIf="submittedEquivalencias && fequi.porcentaje.errors" class="invalid-feedback d-block">
@@ -426,6 +428,8 @@
                                         <nz-option nzLabel="40%" nzValue="40"></nz-option>
                                         <nz-option nzLabel="45%" nzValue="45"></nz-option>
                                         <nz-option nzLabel="50%" nzValue="50"></nz-option>
+                                        <nz-option nzLabel="100%" nzValue="100"></nz-option>
+                                        <nz-option nzLabel="200%" nzValue="200"></nz-option>
                                     </nz-select>
                                 </div>
                             </div>  
@@ -447,7 +451,7 @@
                             <div class="input-group">   
                                 <input type="text" class="form-control" formControlName="precio_general" maxlength="7">                    
                             </div> 
-                            <span class="label" style="color: #292929; font-style: italic;">Porcentaje asignado: </span>  
+                            <span class="label" style="color: #757474; font-style: italic;">Ultima modificacion: <span style="color: #292929;">{{ productClientList.fecha_ultima_modificacion }}</span></span> 
                                 <div *ngIf="aplicarClienteProducto && fe.precio_general.errors" class="invalid-feedback d-block">
                                     <div *ngIf="fe.precio_general.errors.required" class="text-danger">Campo requerido</div>
                                     <div *ngIf="fe.precio_general.errors.pattern" class="text-danger">Valor invalido</div>           
@@ -488,10 +492,6 @@
   </nz-modal>
 
 
-
-
-
-
   
 <nz-modal [(nzVisible)]="isVisibleObservaciones" [nzWidth]="610" [nzTitle]="modalTitleObservaciones" [nzContent]="modalContentObservaciones" [nzFooter]="modalFooterObservaciones" (nzOnCancel)="handleCancelObservaciones()">
     <ng-template #modalTitleObservaciones>Empresa: {{ clientDataSelected.nombre_empresa_cliente }}</ng-template>
@@ -509,4 +509,4 @@
         <button nz-button nzType="default" (click)="handleCancelObservaciones()">Cerrar</button>
         <button nz-button nzType="primary" (click)="showConfirmEnviarCorreo()">Enviar</button>
     </ng-template>
-  </nz-modal>
+</nz-modal>

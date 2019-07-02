@@ -5,6 +5,16 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 
+import { FusionChartsModule } from 'angular-fusioncharts';
+
+// Load FusionCharts
+import * as FusionCharts from 'fusioncharts';
+// Load Charts module
+import * as Charts from 'fusioncharts/fusioncharts.charts';
+// Load themes
+import * as TimeSeries from 'fusioncharts/fusioncharts.timeseries';
+import * as PowerCharts from 'fusioncharts/fusioncharts.powercharts';
+
 import { ProductsRoutingModule } from './products-routing.module';
 import { ProductsComponent } from './products.component';
 
@@ -27,10 +37,19 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
 
 import 'rxjs';
 
+// Add dependencies to FusionChartsModule
+FusionChartsModule.fcRoot(
+  FusionCharts,
+  Charts,
+  TimeSeries,
+  PowerCharts
+)
+
 @NgModule({
   declarations: [ProductsComponent],
   imports: [
     CommonModule,
+    FusionChartsModule,
     ProductsRoutingModule,
     HttpClientModule,
     NzTableModule,

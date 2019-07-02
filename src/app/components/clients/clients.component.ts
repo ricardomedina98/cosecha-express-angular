@@ -274,6 +274,8 @@ export class ClientsComponent implements OnInit {
         this.productClientList = JSON.parse(JSON.stringify(data));        
         this.precioForm.controls['precio_general'].setValue(this.productClientList.precio_semanal);
 
+        console.log(this.productClientList);
+
         this.precioForm.get('tipo').setValue(null);  
         this.precioForm.get('manual').setValue(null);  
         this.precioForm.get('porcentaje').setValue(null);  

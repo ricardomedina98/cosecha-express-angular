@@ -1,4 +1,3 @@
-
   <mk-layout-wrapper>
     <mk-layout-header logoLink="/">
       <mk-layout-header-logo><b>Cosecha </b>Express</mk-layout-header-logo>
@@ -8,9 +7,7 @@
     <mk-layout-sidebar-left>
       <app-sidebar-left-inner></app-sidebar-left-inner>
     </mk-layout-sidebar-left>
-    <mk-layout-sidebar-right>
-      <app-sidebar-right-inner></app-sidebar-right-inner>
-    </mk-layout-sidebar-right>
+ 
     <mk-layout-content>
       <div mk-layout-content-before-header>
         <div *mkLoadingPage="{checkPendingHttp: true, checkPendingRoute: true}">
@@ -21,11 +18,10 @@
     </mk-layout-content>
     <mk-layout-footer>
       <mk-layout-footer-left>
-        <strong>Cosecha Express <a href="#"></a></strong>
+        <strong>Cosecha Express<span>&#174;</span> {{ getYear() }}</strong>
       </mk-layout-footer-left>
       <mk-layout-footer-right>
-        <b>Version</b> 0.0.1
+        <b><a href="http://hv31svg103.neubox.net:2095/" target="_blank">Grupo TLK<span>&#174;</span></a></b>
       </mk-layout-footer-right>
     </mk-layout-footer>
   </mk-layout-wrapper>
-

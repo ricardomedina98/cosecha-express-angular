@@ -29,12 +29,20 @@
             </thead>
             <tbody>
                 <tr *ngFor="let data of tableClientes.data">
-                    <td >{{ data.nombre_cliente }}</td>
+                    <ng-container *ngIf="!data.nombre_cliente; then sinAsignar; else nombreCliente"></ng-container>
+                    <ng-template #sinAsignar>
+                    <td>
+                        <div class="text-danger">Sin asignar</div>
+                    </td>
+                    </ng-template>
+                    <ng-template #nombreCliente>
+                        <td style="width: 18%">{{ data.nombre_cliente }}</td>
+                    </ng-template>
                     <td >{{ data.nombre_empresa_cliente }}</td>
                     <td >{{ data.correo_cliente }}</td>
                     <td >{{ data.telefono_cliente }}</td>
                     <td style="text-align: center">
-                        <button style="margin-right: 10px" nzTitle="Lista de productos" nzPlacement="topCenter" nz-tooltip class="btn btn-success" (click)="showModalListaCliente(data)"><i class="fa fa-list-ul" aria-hidden="true"></i></button>                    
+                        <button style="margin-right: 10px" nzTitle="Lista de productos" nzPlacement="topCenter" nz-tooltip class="btn btn-lista" (click)="showModalListaCliente(data)"><i class="fa fa-list-ul" aria-hidden="true"></i></button>                    
                         <button style="margin-right: 10px" nzTitle="Editar" nzPlacement="topCenter" nz-tooltip class="btn btn-success" (click)="showModalCliente(data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>                    
                         <button class="btn btn-danger" nzTitle="Eliminar" nzPlacement="topCenter" nz-tooltip (click)="showDeleteConfirm(data)"><i class="fa fa-trash" aria-hidden="true"></i></button>
                     </td>

@@ -10,6 +10,12 @@
   border-color: #2E8458;
 }
 
+.btn-lista{
+  color: #fff;
+    background-color: #ffab00; 
+    border-color: #e9c13e;
+}
+
 .btn-enviar{
   color: #fff;
   background-color: #2EC458; 

@@ -21,12 +21,14 @@ import { Product } from '../../models/product';
 import { Medicion } from '../../models/medicion';
 import { Categoria } from '../../models/categoria';
 import { Equivalencia } from '../../models/equivalencia';
+import { isString } from 'util';
 
 @Component({
     selector: 'app-products',
     templateUrl: './products.component.html',
     styleUrls: ['./products.component.css']
 })
+
 export class ProductsComponent implements OnInit {
 
 //#region Variables fucioncharts
@@ -49,6 +51,7 @@ export class ProductsComponent implements OnInit {
     productForm: FormGroup;
     equivalenciaForm: FormGroup;
     productAgregarForm: FormGroup;
+    buscarCategoria: FormGroup;
 
     submittedEquivalencia = false;
     submittedGeneral = false;
@@ -63,6 +66,8 @@ export class ProductsComponent implements OnInit {
     tipo = '';
 
     searchValue = '';
+
+
 
     isVisibleEquiv = false;
     isConfirmLoadingEquiv = false;
@@ -187,14 +192,26 @@ export class ProductsComponent implements OnInit {
             id_medicion: ['', Validators.required],
             id_categoria: ['']
         });
+
+        this.buscarCategoria = this.formBuilder.group({
+            categoria: ['']
+        });
+        
+        new Date().getFullYear();
+        this.buscarCategoria.get('categoria').setValue(null);
+     
     }
 
-    numericOnly(event): void {    
-        let num1 = this.equivalenciaForm.get('equivalencia1').value;
-        let num2 = this.equivalenciaForm.get('equivalencia2').value;
+    buscarxCategoria(){
+        let id_categoria = this.buscarCategoria.get('categoria').value;
 
-        console.log(num1);
-        console.log(num2);
+        this.products = this.transformCategorias(this.products, id_categoria, 'id_categoria');
+    }
+
+    onChangeCategoria(value) {        
+        if(value == null){
+            this.products = this.productsBackup;
+        }
     }
 
     showModalEquiv(data: string): void {
@@ -213,8 +230,6 @@ export class ProductsComponent implements OnInit {
             this.equivalenciaForm.controls['tipoEquiv2'].setValue(this.productDataSelected.equivalencia2Med);        
         }                
         this.equivalenciaForm.controls['precio_general'].setValue(this.productDataSelected.precio_semanal);
-
-
 
         this.equivalenciaForm.get('porcentaje').setValue(null);
         this.equivalenciaForm.get('manual').setValue(null);
@@ -314,10 +329,10 @@ export class ProductsComponent implements OnInit {
     }
 
     search(): void {
-        this.products = this.transform(this.products, this.searchValue);
+        this.products = this.transform(this.products, this.searchValue, 'nombre_producto');
     }
 
-    transform(itemList: Product[], searchKeyword: string): Product[] {
+    transform(itemList: any[], searchKeyword: string, nombre_columna: string)  {
         if (!itemList)
           return [];
         if (!searchKeyword)
@@ -325,20 +340,41 @@ export class ProductsComponent implements OnInit {
         let filteredList = [];
         if (itemList.length > 0) {
           searchKeyword = searchKeyword.toLowerCase();
-          itemList.forEach(item => {
-            //Object.values(item) => gives the list of all the property values of the 'item' object
-            let propValueList = Object.values(item);
-            for(let i=0;i<propValueList.length;i++)
-            {
-              if (propValueList[i]) {
-                if (propValueList[i].toString().toLowerCase().indexOf(searchKeyword) > -1)
-                {
-                  filteredList.push(item);
-                  break;
+          itemList.forEach(item => {      
+
+            let columna = item[nombre_columna].toString();          
+        
+            for(let i=0;i<columna.length;i++)
+            {                
+                if (columna) {
+                    if (columna.toString().toLowerCase().indexOf(searchKeyword) > -1) {
+                        filteredList.push(item);
+                        break;
+                    }
                 }
-              }
             }
-          });
+                
+            });
+        }
+        return filteredList;
+    }
+
+    transformCategorias(itemList: any[], searchKeyword: string, nombre_columna: string)  {
+        if (!itemList)
+          return [];
+        if (!searchKeyword)
+          return itemList;
+        let filteredList = [];
+        if (itemList.length > 0) {
+          searchKeyword = searchKeyword.toLowerCase();
+          itemList.forEach(item => {      
+                let columna = Number.parseInt(searchKeyword);          
+                if(Number.isInteger(columna)){
+                    if(item.id_categoria == Number(searchKeyword)) {
+                        filteredList.push(item);
+                    }
+                }  
+            });
         }
         return filteredList;
     }

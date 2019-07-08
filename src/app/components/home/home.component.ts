@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { HomeService } from '../../services/home.service'
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -7,9 +9,42 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  totalProducto;
+  totalCliente;
+  totalUsuario;
+
+  constructor(
+
+    private homeService: HomeService
+  ) { 
+
+    this.homeService.totalProductos()
+    .subscribe(result => {  
+      console.log(result);
+        this.totalProducto = result.Total;
+    }, error => {
+        console.log(error);
+    });
+    
+    this.homeService.totalUsuarios()
+    .subscribe(result => {
+      console.log(result);
+      this.totalUsuario = result.Total;
+    }, error => {
+      console.log(error);
+    });
+
+    this.homeService.totalClientes()
+    .subscribe(result => {
+      console.log(result);
+      this.totalCliente = result.Total;
+    }, error => {
+      console.log(error);
+    });
+  }
 
   ngOnInit() {
+
   }
 
 }

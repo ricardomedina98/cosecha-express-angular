@@ -1,11 +1,33 @@
 <mk-box [isRemovable]="false" [isCollapsed]="false">
-    <div class="container">
-        <div class="row">
-            <div class="col-4">
+<form [formGroup]="buscarCategoria">
+    <div class="row">
+        <div class="container-fluid">
+            <div class="col-sm-6">
+                <div class="row">
+                    
+                    <div class="col-sm-5">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Selecionar categoria" formControlName="categoria" (ngModelChange)="onChangeCategoria($event)" style="width: 100%">                            
+                                    <nz-option *ngFor="let categoria of categorias;" nzLabel="{{categoria.nombre_categoria}}" nzValue="{{categoria.id_categoria}}"></nz-option>                    
+                                </nz-select>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-1">
+                        <button nz-button nzType="primary" (click)="buscarxCategoria()">Buscar</button>
+                    </div>
+        
+                </div>
+            </div>
+
+            <div class="col-sm-2 pull-right">
                 <button nz-button nzType="primary" (click)="showModalAgregarProducto()">Agregar producto</button>
             </div>
         </div>
-    </div>
+    </div> 
+</form>
 </mk-box>
 
 <div style="background: white">
@@ -34,17 +56,17 @@
                 <ng-template #sinAsignar>
                     <td>
                         <div class="text-danger">Sin asignar</div>
-                    </td>
+                </td>
                 </ng-template>
                 <ng-template #precioSemanal>
-                    <td>${{data.precio_semanal | number}}</td>
+                    <td style="width: 18%">${{data.precio_semanal | number}}</td>
                 </ng-template>
                 <td>{{ data.tipo_medicion }}</td>
                 <td>{{ data.existencia }}</td>  
-                <td style="text-align: center">
-                    <button style="margin-right: 10px" nzTitle="Calcular" nzPlacement="topCenter" nz-tooltip class="btn btn-orange" (click)="showModalEquiv(data)"><i class="fa fa-calculator" aria-hidden="true"></i></button>
-                    <button style="margin-right: 10px" nzTitle="Editar" nzPlacement="topCenter" nz-tooltip class="btn btn-success" (click)="showModalGeneral(data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                    <button style="margin-right: 10px" nzTitle="Eliminar" nzPlacement="topCenter" nz-tooltip class="btn btn-danger" (click)="showDeleteConfirm(data)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                <td class="text-center" style="width: 25%">
+                    <button style="margin-right: 15px" nzTitle="Calcular" nzPlacement="topCenter" nz-tooltip class="btn btn-orange" (click)="showModalEquiv(data)"><i class="fa fa-calculator" aria-hidden="true"></i></button>
+                    <button style="margin-right: 15px" nzTitle="Editar" nzPlacement="topCenter" nz-tooltip class="btn btn-success" (click)="showModalGeneral(data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                    <button style="margin-right: 15px" nzTitle="Eliminar" nzPlacement="topCenter" nz-tooltip class="btn btn-danger" (click)="showDeleteConfirm(data)"><i class="fa fa-trash" aria-hidden="true"></i></button>
                     <button class="btn btn-grafica" nzTitle="Estadistica" nzPlacement="topCenter" nz-tooltip (click)="showModalGraficaProducto(data)"><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
                 </td>
             </tr>
@@ -90,10 +112,8 @@
                             <input type="text" class="form-control" formControlName="equivalencia2" maxlength="7"
                                 [ngClass]="{ 'is-invalid': submittedEquivalencia && fe.equivalencia2.errors }">
                             <span class="input-group-btn">
-                                <nz-select style="width: 115px;" formControlName="tipoEquiv2" nzShowSearch nzAllowClear
-                                    nzPlaceHolder="Selecionar...">
-                                    <nz-option *ngFor="let medicion of mediciones" nzLabel="{{medicion.tipo_medicion}}"
-                                        nzValue="{{medicion.id_medicion}}"></nz-option>
+                                <nz-select style="width: 115px;" formControlName="tipoEquiv2" nzShowSearch nzAllowClear nzPlaceHolder="Selecionar...">
+                                    <nz-option *ngFor="let medicion of mediciones" nzLabel="{{medicion.tipo_medicion}}" nzValue="{{medicion.id_medicion}}"></nz-option>
                                 </nz-select>
                             </span>
                         </div>
@@ -261,10 +281,8 @@
                         <label for="">Medicion</label>
                         <div class="input-group">
                             <span class="input-group-btn">
-                                <nz-select nzShowSearch nzPlaceHolder="Selecionar..." formControlName="id_medicion"
-                                    [ngClass]="{ 'is-invalid': submittedGeneral && f.id_medicion.errors }">
-                                    <nz-option *ngFor="let medicion of mediciones" nzLabel="{{medicion.tipo_medicion}}"
-                                        nzValue="{{medicion.id_medicion}}"></nz-option>
+                                <nz-select nzShowSearch nzPlaceHolder="Selecionar..." formControlName="id_medicion"[ngClass]="{ 'is-invalid': submittedGeneral && f.id_medicion.errors }">
+                                    <nz-option *ngFor="let medicion of mediciones" nzLabel="{{medicion.tipo_medicion}}" nzValue="{{medicion.id_medicion}}"></nz-option>
                                 </nz-select>
                             </span>
                         </div>
@@ -390,12 +408,12 @@
                             <span class="input-group-btn">
                                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Selecionar..." formControlName="id_categoria">
                                     <ng-container *ngFor="let categoria of categorias; let first = first; let last = last">
-                                        <nz-option nzLabel="{{categoria.nombre_categoria}}" nzValue="{{categoria.id_categoria}}"></nz-option>
-                                        <ng-container *ngIf="last; then optionNull;"></ng-container>
-
+                                        <ng-container *ngIf="first; then optionNull;"></ng-container>
+                                        
                                         <ng-template #optionNull>
                                             <nz-option  nzLabel="Ninguna" nzValue="null"></nz-option>                           
                                         </ng-template>
+                                        <nz-option nzLabel="{{categoria.nombre_categoria}}" nzValue="{{categoria.id_categoria}}"></nz-option>
                                     </ng-container>
 
                                 </nz-select>
@@ -423,7 +441,7 @@
 
 
 <nz-modal [(nzVisible)]="isVisibleGraficaProducto" [nzWidth]="1000" [nzTitle]="modalTitleGraficaProducto" [nzContent]="modalContentGraficaProducto" [nzFooter]="modalFooterGraficaProducto" (nzOnCancel)="handleCancelGraficaProducto()">
-    <ng-template #modalTitleGraficaProducto>Producto: {{ productDataSelected.nombre_producto }}</ng-template>
+    <ng-template #modalTitleGraficaProducto>Producto: {{ productDataSelected.nombre_producto || null }}</ng-template>
     <ng-template #modalContentGraficaProducto>
         
     <fusioncharts

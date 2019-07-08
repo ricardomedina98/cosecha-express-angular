@@ -1,66 +1,43 @@
-
 <section class="content">
 
-  <!-- Default box -->
-  <div class="box">
-    <div class="box-header with-border">
-      <h3 class="box-title">Secciones</h3>
-
-      <div class="box-tools pull-right">
-        <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
-          <i class="fa fa-minus"></i></button>
-        <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
-          <i class="fa fa-times"></i></button>
-      </div>
-    </div>
-    <div class="box-body">
-      <div class="col-lg-4 col-xs-6">
-        <!-- small box -->
-        <div class="small-box bg-aqua">
-          <div class="inner">
-            <h3 style="color: white">Clientes</h3>
-
-            <p>1 clientes registardos</p>
-          </div>
-          <div class="icon">
-            <i class="fa fa-address-card"></i>
-          </div>
-          <a href="/" class="small-box-footer">Ver mas <i class="fa fa-arrow-circle-right"></i></a>
+    <div class="row">
+        <div class="col-md-4 col-xs-12">
+          <mk-box-small header="{{ totalProducto }}" backgroundColor="aqua" headerColor="#FFFFFF" iconStyleClass="fa fa-product-hunt">
+            <mk-box-small-content>Productos existentes</mk-box-small-content>
+            <mk-box-small-footer>
+              <a routerLink="/productos">Mas informacion <i class="fa fa-arrow-circle-right"></i></a>
+            </mk-box-small-footer>
+          </mk-box-small>
+        </div>
+        <div class="col-md-4 col-xs-12">
+          <mk-box-small header="{{ totalCliente }}" backgroundColor="green" headerColor="#FFFFFF" iconStyleClass="fa fa-address-card">
+            <mk-box-small-content>Clientes activos</mk-box-small-content>
+            <mk-box-small-footer>
+              <a routerLink="/clientes">Mas informacion <i class="fa fa-arrow-circle-right"></i></a>
+            </mk-box-small-footer>
+          </mk-box-small>
+        </div>
+        <div class="col-md-4 col-xs-12">
+          <mk-box-small header="{{ totalUsuario }}" backgroundColor="yellow" headerColor="#FFFFFF" iconStyleClass="fa fa-user-o">
+            <mk-box-small-content>Usuarios regitrados</mk-box-small-content>
+            <mk-box-small-footer>
+              <a routerLink="/usuarios">Mas informacion <i class="fa fa-arrow-circle-right"></i></a>
+            </mk-box-small-footer>
+          </mk-box-small>
         </div>
       </div>
-
-      <div class="col-lg-4 col-xs-6">
-        <!-- small box -->
-        <div class="small-box bg-green">
-          <div class="inner">
-            <h3 style="color: white">Proveedores</h3>
-
-            <p>1 proveedores registrados</p>
-          </div>
-          <div class="icon">
-            <i class="fa fa-users"></i>
-          </div>
-          <a href="/" class="small-box-footer">Ver mas <i class="fa fa-arrow-circle-right"></i></a>
+    
+    <!--
+      <div class="row">
+        <div class="col-md-4 col-xs-12">
+          <mk-box-small header="150" backgroundColor="aqua" headerColor="#FFFFFF" iconStyleClass="fa fa-users">
+            <mk-box-small-content>Proveedores activos</mk-box-small-content>
+            <mk-box-small-footer>
+              <a routerLink="/proveedores">Mas informacion <i class="fa fa-arrow-circle-right"></i></a>
+            </mk-box-small-footer>
+          </mk-box-small>
         </div>
       </div>
-
-      <div class="col-lg-4 col-xs-6">
-        <!-- small box -->
-        <div class="small-box bg-yellow">
-          <div class="inner">
-            <h3 style="color: white">Productos</h3>
-
-            <p>1 productos registrados</p>
-          </div>
-          <div class="icon">
-            <i class="fa fa-product-hunt"></i>
-          </div>
-          <a href="/" class="small-box-footer">Ver mas <i class="fa fa-arrow-circle-right"></i></a>
-        </div>
-      </div>
-    </div>
-
-  </div>
-  <!-- /.box -->
+    -->
 
 </section>

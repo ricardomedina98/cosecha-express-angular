@@ -5,6 +5,13 @@
     box-shadow: none;
 }
 
+.btn-primary-outline-edit {    
+    color: #107dac;
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}
+
 .btn-primary-outline {    
     color: #107dac;
     background-color: transparent;
@@ -14,7 +21,8 @@
 
 .btn-primary-outline:hover {
     color: red;
-    background-color: transparent;
-    border-color: transparent;
-    box-shadow: none;
+}
+
+.btn-primary-outline-edit:hover {    
+    color: rgb(243, 156, 18);
 }

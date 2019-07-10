@@ -20,6 +20,8 @@ import { NzDropDownModule, NZ_ICONS, NzModalModule, NgZorroAntdModule } from 'ng
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 
+import { NgxPermissionsModule } from 'ngx-permissions';
+
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
 };
@@ -43,16 +45,17 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     CoreRoutingModule,
     LayoutModule.forRoot(adminLteConf),
     LoadingPageModule,
-    MaterialBarModule
+    MaterialBarModule,
+    NgxPermissionsModule.forRoot()
   ],
   exports: [
     BoxModule,
     TabsModule, 
     HeaderInnerComponent, 
     SidebarLeftInnerComponent, 
-    SidebarRightInnerComponent    
+    SidebarRightInnerComponent,
+    NgxPermissionsModule   
   ],
   providers: [{ provide: NZ_ICONS, useValue: icons }]
 })
 export class CoreModule { }
-

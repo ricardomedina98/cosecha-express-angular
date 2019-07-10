@@ -4,7 +4,7 @@ export class User{
         public nombre_empleado: string,
         public nombre_usuario: string,
         public contrasena: string,
-        public role: string,
+        public id_role: string,
         public token?: string,
         public status?: string,
         public fecha_creacion?: string,

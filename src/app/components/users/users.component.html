@@ -20,18 +20,16 @@
       </thead>
       <tbody>
           <tr *ngFor="let data of tableUsers.data">
-              <td >{{ data.nombre_empleado }}</td>
-              <td >{{ data.nombre_usuario }}</td>
-              
-              <ng-container *ngIf="data.role == 'admin'; then adminThen;"></ng-container>
+              <td>{{ data.nombre_empleado }}</td>
+              <td>{{ data.nombre_usuario }}</td>
+              <ng-container *ngIf="data.id_role == '1'; then adminThen;"></ng-container>
               <ng-template #adminThen>
-                <td >Administrador</td>
-              </ng-template>
-              
+                <td>Administrador</td>
+              </ng-template>  
               <td style="text-align: center">
                   <button style="margin-right: 10px" nzTitle="Editar" nzPlacement="topCenter" nz-tooltip class="btn btn-success" (click)="showModalEditarUsuario(data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>                    
-                  <button class="btn btn-danger" nzTitle="Eliminar" nzPlacement="topCenter" nz-tooltip (click)="showDeleteConfirm(data)"><i class="fa fa-trash" aria-hidden="true"></i></button>
-              </td>
+                  <button style="margin-right: 10px" class="btn btn-danger" nzTitle="Eliminar" nzPlacement="topCenter" nz-tooltip (click)="showDeleteConfirm(data)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+               </td>
           </tr>
       </tbody>
   </nz-table>

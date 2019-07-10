@@ -23,6 +23,7 @@ import { NZ_I18N, es_ES } from 'ng-zorro-antd';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 
+
 registerLocaleData(en);
 
 
@@ -39,7 +40,7 @@ const config: SocketIoConfig = { url: environment.url_api, options: {} };
     HttpClientModule,    
     AlertModule,
     BrowserAnimationsModule, 
-    NgZorroAntdModule, 
+    NgZorroAntdModule,
     SocketIoModule.forRoot(config),
     ToastrModule.forRoot({
       timeOut: 2000,

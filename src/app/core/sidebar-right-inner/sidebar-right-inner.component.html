@@ -11,14 +11,20 @@
                 <ng-template #optionNull>
                   <label style="color: black" class="control-sidebar-subheading"><a class="btn-primary-outline-add pull-right" (click)="showModalAgregarCategoria()"><i class="fa fa-plus" aria-hidden="true"></i></a>Agregar</label>                       
                 </ng-template>
-                <label style="color: black" class="control-sidebar-subheading"><a class="btn-primary-outline pull-right" (click)="showDeleteConfirmCategoria(categoria)"><i class="fa fa-trash" aria-hidden="true"></i></a>{{categoria.nombre_categoria}}</label>  
+                <label style="color: black" class="control-sidebar-subheading">
+                  <a class="btn-primary-outline pull-right" (click)="showDeleteConfirmCategoria(categoria)">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                  </a>
+                  <a style="margin-right: 10px" class="btn-primary-outline-edit pull-right" (click)="showDeleteConfirmCategoria(categoria)">
+                    <i class="fa fa-edit" aria-hidden="true"></i>
+                  </a>{{categoria.nombre_categoria}}
+                </label>  
             </ng-container>
           
         </mk-box>
       </div>
     </mk-tab-content>
   </mk-tab>
-
 
   <nz-modal [(nzVisible)]="isVisibleAgregarCategoria" [nzWidth]="300" [nzTitle]="modalTitleAgregarCategoria" [nzContent]="modalContentAgregarCategoria" [nzFooter]="modalFooterAgregarCategoria" (nzOnCancel)="handleCancelAgregarCategoria()">
       <ng-template #modalTitleAgregarCategoria>Categoria</ng-template>

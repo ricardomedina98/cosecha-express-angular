@@ -62,5 +62,4 @@ export class SidebarRightInnerComponent implements OnInit, OnDestroy {
             }
         });
     }
-
 }

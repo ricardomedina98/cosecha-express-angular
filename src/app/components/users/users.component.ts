@@ -147,7 +147,7 @@ export class UsersComponent implements OnInit {
         this.userEditarForm.controls['nombre_empleado'].setValue(this.userDataSelected.nombre_empleado);
         this.userEditarForm.controls['nombre_usuario'].setValue(this.userDataSelected.nombre_usuario);
         this.userEditarForm.controls['contrasena'].setValue(this.userDataSelected.contrasena);
-        this.userEditarForm.controls['rol'].setValue(this.userDataSelected.role);
+        this.userEditarForm.controls['rol'].setValue(this.userDataSelected.id_role);
         this.isVisibleEditarUsuario = true;
     }
 

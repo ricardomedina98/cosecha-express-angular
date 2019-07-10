@@ -31,7 +31,7 @@ export class AuthentificationService {
         return this.http.post<any>(`${environment.url_api}iniciar_sesion`, data)
         .pipe(map (user=> {
 
-            if(user && user.token) {
+            if(user && user.token) {                
                 localStorage.setItem('currentUser', JSON.stringify(user));
                 this.currentUserSubject.next(user);
             }

@@ -34,7 +34,7 @@ export class UserService {
                         item.nombre_empleado,
                         item.nombre_usuario,
                         item.contrasena,
-                        item.role,
+                        item.id_role,
                         item.token,
                         item.status,
                         item.fecha_creacion,
@@ -52,7 +52,7 @@ export class UserService {
             nombre_empleado: user.nombre_empleado,
             nombre_usuario: user.nombre_usuario,
             contrasena: user.contrasena,
-            role: user.role
+            id_role: user.id_role
         }
 
         return this.http.post<any>(`${environment.url_api}usuario`, data)
@@ -90,7 +90,7 @@ export class UserService {
             nombre_empleado: user.nombre_empleado,
             nombre_usuario: user.nombre_usuario,
             contrasena: user.contrasena,
-            role: user.role
+            id_role: user.id_role
         }
         
         return this.http.put<any>(`${environment.url_api}usuario/${user.id_usuario}`, data)

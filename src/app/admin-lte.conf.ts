@@ -7,7 +7,7 @@ export const adminLteConf = {
     // sidebarRightSkin: 'dark',
     // isSidebarRightCollapsed: true,
     // isSidebarRightOverContent: true,
-    // layout: 'normal',
+    layout: 'fixed',
     sidebarLeftMenu: [
       {label: 'Menu de Navegacion', separator: true},
       {label: 'Inicio', route: '/', iconClasses: 'fa fa-road', pullRights: [{classes: 'label pull-right bg-green'}]},

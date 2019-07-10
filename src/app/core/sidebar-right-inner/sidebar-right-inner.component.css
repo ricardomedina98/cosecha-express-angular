@@ -1,0 +1,20 @@
+.btn-primary-outline-add {    
+    color: green;
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.btn-primary-outline {    
+    color: #107dac;
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.btn-primary-outline:hover {
+    color: red;
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}

@@ -1,100 +1,66 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Categoria } from '../../models/categoria';
+import { CategoriaService } from '../../services/categoria.service';
 
-import {Subscriber} from 'rxjs';
-
-import {LayoutStore} from 'angular-admin-lte';
+import { NzModalService } from 'ng-zorro-antd';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-sidebar-right-inner',
-  templateUrl: './sidebar-right-inner.component.html',
-  styleUrls: ['./sidebar-right-inner.component.css']
+    selector: 'app-sidebar-right-inner',
+    templateUrl: './sidebar-right-inner.component.html',
+    styleUrls: ['./sidebar-right-inner.component.css']
 })
 export class SidebarRightInnerComponent implements OnInit, OnDestroy {
 
-  public layout: string;
-  public isSidebarLeftCollapsed: boolean;
-  public isSidebarLeftExpandOnOver: boolean;
-  public isSidebarLeftMini: boolean;
+    public categorias: Categoria[];
 
-  private subscriptions = [];
+    isVisibleAgregarCategoria = false;
+    isConfirmLoadingAgregarCategoria = false;
 
-  constructor(
-    public layoutStore: LayoutStore,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {}
+    public categoriaDataSelected: Categoria;
 
-  /**
-   * [ngOnInit description]
-   * @method ngOnInit
-   */
-  ngOnInit() {
-    this.subscriptions.push(this.layoutStore.isSidebarLeftCollapsed.subscribe((value: boolean) => {
-      this.isSidebarLeftCollapsed = value;
-      this.changeDetectorRef.detectChanges();
-    }));
-    this.subscriptions.push(this.layoutStore.isSidebarLeftExpandOnOver.subscribe((value: boolean) => {
-      this.isSidebarLeftExpandOnOver = value;
-      this.changeDetectorRef.detectChanges();
-    }));
-    this.subscriptions.push(this.layoutStore.isSidebarLeftMini.subscribe((value: boolean) => {
-      this.isSidebarLeftMini = value;
-      this.changeDetectorRef.detectChanges();
-    }));
-  }
+    constructor(
+        public categoriaService: CategoriaService,
+        private modalService: NzModalService,
+        private toastr: ToastrService
+    ) { }
 
-  /**
-   * @method ngOnDestroy
-   */
-  ngOnDestroy() {
-    this.removeSubscriptions();
-  }
+    ngOnInit() {
 
-  /**
-   * [removeListeners description]
-   * @method removeListeners
-   */
-  private removeSubscriptions(): void {
-    if (this.subscriptions) {
-      this.subscriptions.forEach((subscription: Subscriber<any>) => {
-        subscription.unsubscribe();
-      });
+        this.categoriaService.getCategoria()
+            .subscribe(data => {
+                this.categorias = data;
+            }, err => {
+                console.log(err);
+            });
     }
-    this.subscriptions = [];
-  }
 
+    ngOnDestroy() {
 
-  /**
-   * [onLayoutChange description]
-   * @method onLayoutChange
-   * @param  {[type]}       event [description]
-   */
-  public onLayoutChange(event): void {
-    this.layout = event.target.checked ? event.target.getAttribute('value') : '';
-    this.layoutStore.setLayout(this.layout);
-  }
-
-  /**
-   * [changeSkin description]
-   * @method changeSkin
-   * @param  {[type]}   event [description]
-   * @param  {string}   color [description]
-   */
-  public changeSkin(event, color: string): void {
-    event.preventDefault();
-    this.layoutStore.setSkin(color);
-  }
-
-  /**
-   * [changeSidebarRightSkin description]
-   * @method changeSidebarRightSkin
-   * @param  {boolean}              value [description]
-   */
-  public changeSidebarRightSkin(value: boolean): void {
-    if (value) {
-      this.layoutStore.setSidebarRightSkin('light');
-    } else {
-      this.layoutStore.setSidebarRightSkin('dark');
     }
-  }
+
+    showModalAgregarCategoria(): void {
+        this.isVisibleAgregarCategoria = true;
+    }
+
+    handleCancelAgregarCategoria(): void {
+        this.isVisibleAgregarCategoria = false;
+    }
+
+    showDeleteConfirmCategoria(categoria: Categoria): void {
+        this.categoriaDataSelected = JSON.parse(JSON.stringify(categoria));
+        this.modalService.confirm({
+            nzTitle: '¿Esta seguro que desea eliminar la categoria?',
+            nzContent: '<b style="color: red;">Se eliminara la categoria ' + this.categoriaDataSelected.nombre_categoria + '</b>',
+            nzOkText: 'SI',
+            nzOkType: 'danger',
+            nzOnOk: () => {
+                console.log('OK');
+            },
+            nzCancelText: 'No',
+            nzOnCancel: () => {
+            }
+        });
+    }
+
 }
-

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgxPermissionsService } from 'ngx-permissions';
+import { NgxPermissionsService, NgxRolesService } from 'ngx-permissions';
 
 @Component({
   selector: 'app-core',
@@ -10,11 +10,12 @@ import { NgxPermissionsService } from 'ngx-permissions';
 export class CoreComponent implements OnInit {
 
   constructor(
-    private permissionsService: NgxPermissionsService
+    private permissionsService: NgxPermissionsService,
+    private rolesService: NgxRolesService
   ) { }
 
   ngOnInit() {
-    
+ 
   }
 
   getYear(){

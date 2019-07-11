@@ -13,6 +13,7 @@ import { NgZorroAntdModule, NZ_ICONS, NzSelectModule, NzModalModule } from 'ng-z
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 
+import { NzTreeModule } from 'ng-zorro-antd/tree';
 
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
@@ -30,6 +31,7 @@ import 'rxjs';
     UsersRoutingModule,
     NzDropDownModule,
     NgZorroAntdModule,
+    NzTreeModule,
     NzSelectModule,
     NzModalModule,
     BoxModule,

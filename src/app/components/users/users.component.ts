@@ -3,9 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { NzModalService, NzPopconfirmModule, NzInputModule } from 'ng-zorro-antd';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { NzFormatEmitEvent } from 'ng-zorro-antd';
+
 
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user';
+import { Roles } from 'src/app/models/role';
 
 @Component({
     selector: 'app-users',
@@ -14,6 +17,65 @@ import { User } from '../../models/user';
 })
 
 export class UsersComponent implements OnInit {
+
+
+    //
+    defaultCheckedKeys = ['0-0-0'];
+    defaultSelectedKeys = ['0-0-0'];
+    defaultExpandedKeys = ['0-0'];
+  
+    nodes = [
+      {
+        title: 'Productos',
+        key: '0-0',
+        expanded: true,
+        children: [
+          {
+            title: 'Agregar productos',
+            key: '0-0-0',
+            children: [
+              { title: '0-0-0-0', key: '0-0-0-0', isLeaf: true },
+              { title: '0-0-0-1', key: '0-0-0-1', isLeaf: true },
+              { title: '0-0-0-2', key: '0-0-0-2', isLeaf: true }
+            ]
+          },
+          {
+            title: 'Editar productos',
+            key: '0-0-1',
+            children: [
+              { title: '0-0-1-0', key: '0-0-1-0', isLeaf: true },
+              { title: '0-0-1-1', key: '0-0-1-1', isLeaf: true },
+              { title: '0-0-1-2', key: '0-0-1-2', isLeaf: true }
+            ]
+          },
+          {
+            title: '0-0-2',
+            key: '0-0-2',
+            isLeaf: true
+          }
+        ]
+      },
+      {
+        title: 'Clientes',
+        key: '0-1',
+        children: [
+          { title: '0-1-0-0', key: '0-1-0-0', isLeaf: true },
+          { title: '0-1-0-1', key: '0-1-0-1', isLeaf: true },
+          { title: '0-1-0-2', key: '0-1-0-2', isLeaf: true }
+        ]
+      },
+      {
+        title: 'Usuarios',
+        key: '0-2',
+        isLeaf: true
+      }
+    ];
+    //
+
+    nzEvent(event: NzFormatEmitEvent): void {
+        console.log(event);
+    }
+
 
     isLoading: boolean = true;
 
@@ -28,12 +90,17 @@ export class UsersComponent implements OnInit {
     passwordVisible = false;
     password: string;
 
+    roles: Roles;
+
     userAgregarForm: FormGroup;
 
     submittedAgregarUsuario = false;
 
     isVisibleAgregarUsuario = false;
     isConfirmLoadingAgregarUsuario = false;
+
+    isVisibleRoles = false;
+    isConfirmLoadingRoles = false;
 
     userEditarForm: FormGroup;
 
@@ -75,6 +142,14 @@ export class UsersComponent implements OnInit {
             contrasena: [''],
             rol: ['', Validators.required]
         });
+
+        this.userService.getRoles().
+        subscribe(roles => {
+            console.log(roles);
+            this.roles = roles;
+        }, err => {
+            console.log(err);
+        });
     }
 
     get fau() { return this.userAgregarForm.controls; }
@@ -114,12 +189,25 @@ export class UsersComponent implements OnInit {
         this.userService.addUser(user)
             .subscribe(result => {
                 console.log(result);
+
+                let role = Object.values(this.roles).find(value =>{
+                    return value.id_role == result.id_role
+                        
+                });
+
                 this.users.push(new User(
                     result.id_usuario,
                     result.nombre_empleado,
                     result.nombre_usuario,
                     result.contrasena,
-                    result.role
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    role.nombre_role
                 ));
 
                 this.users = [...this.users];
@@ -144,10 +232,11 @@ export class UsersComponent implements OnInit {
     showModalEditarUsuario(data: string): void {
         this.userDataSelected = JSON.parse(JSON.stringify(data));
 
+        console.log(this.userDataSelected);
         this.userEditarForm.controls['nombre_empleado'].setValue(this.userDataSelected.nombre_empleado);
         this.userEditarForm.controls['nombre_usuario'].setValue(this.userDataSelected.nombre_usuario);
         this.userEditarForm.controls['contrasena'].setValue(this.userDataSelected.contrasena);
-        this.userEditarForm.controls['rol'].setValue(this.userDataSelected.id_role);
+        this.userEditarForm.controls['rol'].setValue(String(this.userDataSelected.id_role));
         this.isVisibleEditarUsuario = true;
     }
 
@@ -228,4 +317,11 @@ export class UsersComponent implements OnInit {
         });
     }
 
+    showModalRoles(): void {
+        this.isVisibleRoles = true;
+    }
+
+    handleCancelRoles(): void {
+        this.isVisibleRoles = false;
+    }
 }

@@ -11,5 +11,6 @@ export class User{
         public creado_por?: string,
         public fecha_ultima_modificacion?: string,
         public fecha_modificacion_por?: string,
+        public nombre_role?: string
     ){}
 }

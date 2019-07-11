@@ -7,6 +7,7 @@ import { AuthentificationService } from '../services/authentification.service';
 
 import { Observable } from 'rxjs';
 import { User } from '../models/user';
+import { Roles } from '../models/role';
 
 import { reject } from 'q';
 
@@ -40,7 +41,8 @@ export class UserService {
                         item.fecha_creacion,
                         item.creado_por,
                         item.fecha_ultima_modificacion,
-                        item.fecha_modificacion_por
+                        item.fecha_modificacion_por,
+                        item.Role.nombre_role
                     );
                 });
             })
@@ -108,6 +110,17 @@ export class UserService {
         .pipe(
             map(result => {                
                 return result;
+            })
+        );
+    }
+
+    getRoles(){
+        return this.http.get<any>(`${environment.url_api}roles`)
+        .pipe(
+            map(result => {
+                return JSON.parse(JSON.stringify(result.Roles)).map((item) => {            
+                    return new Roles(item.id_role, item.nombre_role);
+                });
             })
         );
     }

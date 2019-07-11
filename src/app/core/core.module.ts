@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BoxModule, TabsModule, DropdownModule } from 'angular-admin-lte';
 import { RouterModule } from '@angular/router';
 import { CoreRoutingModule } from './core-routing.module';
@@ -38,6 +38,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     FormsModule,
     BoxModule,
     NzDropDownModule,
+    ReactiveFormsModule,
     TabsModule,
     DropdownModule,
     RouterModule,

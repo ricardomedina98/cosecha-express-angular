@@ -1,8 +1,8 @@
 <mk-box [isRemovable]="false" [isCollapsed]="false">
-  <div class="container">
+  <div class="container pull-left">
       <div class="row">
-          <div class="col-4">
-              <button nz-button nzType="primary" class="pull-left" (click)="showModalAgregarUsuario()">Agregar usuario</button>
+          <div class="col-sm-6">
+              <button nz-button nzType="primary" (click)="showModalAgregarUsuario()">Agregar usuario</button>
           </div>
       </div>
   </div>
@@ -26,7 +26,7 @@
               <td style="text-align: center">
                   <button style="margin-right: 10px" nzTitle="Editar" nzPlacement="topCenter" nz-tooltip class="btn btn-success" (click)="showModalEditarUsuario(data)"><i class="fa fa-pencil" aria-hidden="true"></i></button>                    
                   <button style="margin-right: 10px" class="btn btn-danger" nzTitle="Eliminar" nzPlacement="topCenter" nz-tooltip (click)="showDeleteConfirm(data)"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                  <button class="btn btn-role" nzTitle="Role" nzPlacement="topCenter" nz-tooltip (click)="showModalRoles()"><i class="fa fa-key" aria-hidden="true"></i></button>
+                  <button class="btn btn-role" nzTitle="Permisos" nzPlacement="topCenter" nz-tooltip (click)="showModalRoles()"><i class="fa fa-key" aria-hidden="true"></i></button>
                 </td>
           </tr>
       </tbody>
@@ -160,7 +160,7 @@
 <!--                                             ROLES                                                                  -->
  
 
-<nz-modal [(nzVisible)]="isVisibleRoles" [nzWidth]="800" [nzTitle]="modalTitleRoles" [nzContent]="modalContentRoles" [nzFooter]="modalFooterRoles" (nzOnCancel)="handleCancelRoles()">
+<nz-modal [(nzVisible)]="isVisibleRoles" [nzWidth]="400" [nzTitle]="modalTitleRoles" [nzContent]="modalContentRoles" [nzFooter]="modalFooterRoles" (nzOnCancel)="handleCancelRoles()">
     <ng-template #modalTitleRoles>Modulos</ng-template>
   
     <ng-template #modalContentRoles>

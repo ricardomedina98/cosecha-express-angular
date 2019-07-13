@@ -25,23 +25,28 @@
     </mk-tab-content>
   </mk-tab>
 
+  <!--                                           Agregar Categoria                                                  -->
+
   <nz-modal [(nzVisible)]="isVisibleAgregarCategoria" [nzWidth]="300" [nzTitle]="modalTitleAgregarCategoria" [nzContent]="modalContentAgregarCategoria" [nzFooter]="modalFooterAgregarCategoria" (nzOnCancel)="handleCancelAgregarCategoria()">
-      <ng-template #modalTitleAgregarCategoria>Categoria</ng-template>
+      <ng-template #modalTitleAgregarCategoria>Agregar categoria</ng-template>
       <ng-template #modalContentAgregarCategoria>
-          
-        <label for="">Nombre categoria</label>
-        <input type="text" nz-input />
+         
+        <form [formGroup]="categoriaAgregarForm">
+          <label for="">Nombre categoria</label>
+          <input type="text" nz-input formControlName="agregarCategoria" />
+        </form>
 
       </ng-template>
       <ng-template #modalFooterAgregarCategoria>
-          <button nz-button nzType="primary" (click)="handleCancelAgregarCategoria()">Agregar</button>
+          <button nz-button nzType="primary" (click)="onSubmitAgregarCategoria()" [nzLoading]="isConfirmLoadingAgregarCategoria">Agregar</button>
       </ng-template>
   </nz-modal>
  
 
-
+  <!--                                           Editar Categoria                                                  -->
+  
   <nz-modal [(nzVisible)]="isVisibleEditarCategoria" [nzWidth]="300" [nzTitle]="modalTitleEditarCategoria" [nzContent]="modalContentEditarCategoria" [nzFooter]="modalFooterEditarCategoria" (nzOnCancel)="handleCancelEditarCategoria()">
-      <ng-template #modalTitleEditarCategoria>Categoria</ng-template>
+      <ng-template #modalTitleEditarCategoria>Editar categoria</ng-template>
       <ng-template #modalContentEditarCategoria>
         
         <form [formGroup]="categoriaEditarForm">
@@ -51,7 +56,7 @@
 
       </ng-template>
       <ng-template #modalFooterEditarCategoria>
-          <button nz-button nzType="primary" (click)="handleCancelEditarCategoria()">Guardar cambios</button>
+          <button nz-button nzType="primary" (click)="onSubmitEditarCategoria()" [nzLoading]="isConfirmLoadingEditarCategoria">Guardar cambios</button>
       </ng-template>
   </nz-modal>
  

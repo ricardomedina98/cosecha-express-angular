@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NgxPermissionsService, NgxRolesService } from 'ngx-permissions';
+import { NgxPermissionsService } from 'ngx-permissions';
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-core',
@@ -11,15 +13,25 @@ export class CoreComponent implements OnInit {
 
   constructor(
     private permissionsService: NgxPermissionsService,
-    private rolesService: NgxRolesService
+    private http: HttpClient
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    const perm = ["ADMIN", "EDITOR"];
  
+    this.permissionsService.loadPermissions(perm);
+
+
+    this.http.get('url').subscribe((permissions) => {
+      console.log(permissions);
+       //const perm = ["ADMIN", "EDITOR"]; example of permissions
+     
+    })
   }
 
   getYear(){
     return (new Date()).getFullYear();
   }
+
 
 }

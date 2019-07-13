@@ -199,7 +199,6 @@ export class ProductsComponent implements OnInit {
         
         new Date().getFullYear();
         this.buscarCategoria.get('categoria').setValue(null);
-     
     }
 
     buscarxCategoria(){
